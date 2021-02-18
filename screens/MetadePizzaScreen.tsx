@@ -14,8 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import Pedido from "./PedidoScreen";
 
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase("pizzariaromero.banco");
 
 let tipoP = "";
+let quantidadeP = 0;
 let idpizzaP1 = 0;
 let observacaoP1 = "";
 let nomeProdutoP1 = "";
@@ -28,19 +30,21 @@ let descricaoP2 = "";
 let precoP2 = 0;
 
 export default function MetadePizzaScreen({ route }: any) {
-  const { idpizza1 } = route.params;
   const { tipo } = route.params;
+  const { quantidade } = route.params;
+  const { idpizza1 } = route.params;
   const { nomeProduto1 } = route.params;
   const { descricao1 } = route.params;
   const { preco1 } = route.params;
   const { observacao1 } = route.params;
-
+  // METADE 2
   const { idpizza2 } = route.params;
   const { nomeProduto2 } = route.params;
   const { descricao2 } = route.params;
   const { preco2 } = route.params;
 
   tipoP = tipo;
+  quantidadeP = quantidade;
   nomeProdutoP1 = nomeProduto1;
   descricaoP1 = descricao1;
   precoP1 = preco1;
@@ -69,12 +73,69 @@ export default function MetadePizzaScreen({ route }: any) {
 }
 
 export function MetadePizza({ navigation }: any) {
-  // const [carregando, setCarregando] = React.useState(true);
-  const [quantidade, setQuantidade] = React.useState(1);
-  const [obsP1, setObservacaoP1] = React.useState(observacaoP1);
   const [obsP2, setObservacaoP2] = React.useState("");
-  if (quantidade < 1) {
-    setQuantidade(1);
+
+  function adicionarAoCarrinho(
+    tipoP: any,
+    quantidadeP: any,
+    idpizzaP1: any,
+    nomeProdutoP1: any,
+    descricaoP1: any,
+    precoP1: any,
+    observacaoP1: any,
+    idpizzaP2: any,
+    nomeProdutoP2: any,
+    descricaoP2: any,
+    precoP2: any,
+    obsP2: any
+  ) {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "create table if not exists carrinho(id integer primary key, tipoP text, quantidadeP text, idpizzaP1 text, nomeProdutoP1 text, descricaoP1 text,precoP1 text,observacaoP1 text,idpizzaP2  text, nomeProdutoP2 text, descricaoP2 text, precoP2 text,observacaoP2 text );"
+      );
+    });
+
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into carrinho(tipoP,quantidadeP, idpizzaP1,nomeProdutoP1,descricaoP1, precoP1, observacaoP1, idpizzaP2,nomeProdutoP2, descricaoP2, precoP2,observacaoP2 )values(?,?,?,?,?,?,?,?,?,?,?,?)",
+        [
+          tipoP,
+          quantidadeP,
+          idpizzaP1,
+          nomeProdutoP1,
+          descricaoP1,
+          precoP1,
+          observacaoP1,
+          idpizzaP2,
+          nomeProdutoP2,
+          descricaoP2,
+          precoP2,
+          obsP2,
+        ]
+      );
+
+      // tx.executeSql("drop table carrinho");
+
+      tx.executeSql("select * from carrinho", [], (_, { rows }) => {
+        console.log(JSON.stringify(rows));
+      });
+    });
+  }
+
+  function testeVariaveis() {
+    alert(`
+    Tipo: ${tipoP} 
+    Quantidade: ${quantidadeP}
+    ID Pizza1: ${idpizzaP1}
+    Nome: ${nomeProdutoP1}
+    Descrição: ${descricaoP1}
+    Observação: ${observacaoP1}
+    ID Pizza2: ${idpizzaP2}
+    Nom: ${nomeProdutoP2}
+    Descrição: ${descricaoP2}
+    Preço: ${precoP2}
+    Observação: ${obsP2}
+    `);
   }
 
   return (
@@ -93,6 +154,8 @@ export function MetadePizza({ navigation }: any) {
         <View style={styles.box3}>
           <Text style={styles.text4}>Outra Parte :</Text>
           <Text style={styles.text3}>{nomeProdutoP1}</Text>
+          <Text style={styles.text4}>Obs: {observacaoP1}</Text>
+
           <TouchableOpacity
             style={styles.btn2}
             onPress={() => {
@@ -106,41 +169,6 @@ export function MetadePizza({ navigation }: any) {
           </TouchableOpacity>
         </View>
 
-        {/* ITEM 1 */}
-
-        {/* <Text style={styles.title}>{nomeProdutoP1}</Text>
-
-        <View style={styles.boxBranca}>
-          <Text style={styles.text}>{descricaoP1}</Text>
-        </View>
-
-        <View style={styles.separator} />
-
-        <View style={styles.boxBranca}>
-          <View style={styles.flexRow}>
-            <View style={styles.flexStretch}>
-              <View style={styles.box2}>
-                <Text style={styles.title2}>Valor :</Text>
-                <Text style={styles.preco}>R$ {precoP1}</Text>
-              </View>
-            </View>
-          </View>
-         
-          <View style={styles.flexStretch}>
-            <Text style={styles.title4}>OBSERVAÇÕES</Text>
-            <TextInput
-              multiline
-              numberOfLines={2}
-              style={styles.TextInput}
-              editable
-              maxLength={80}
-              value={obsP1}
-              onChangeText={(text) => setObservacaoP1(text)}
-            />
-          </View>
-         
-        </View> */}
-
         {/* ITEM 2 */}
         <Text style={styles.title}>{nomeProdutoP2}</Text>
 
@@ -151,14 +179,7 @@ export function MetadePizza({ navigation }: any) {
         <View style={styles.separator} />
 
         <View style={styles.boxBranca}>
-          <View style={styles.flexRow}>
-            <View style={styles.flexStretch}>
-              <View style={styles.box2}>
-                <Text style={styles.title2}>Valor :</Text>
-                <Text style={styles.preco}>R$ {precoP2}</Text>
-              </View>
-            </View>
-          </View>
+          <View style={styles.flexRow}></View>
           {/* OBSERVAÇÕES */}
           <View style={styles.flexStretch}>
             <Text style={styles.title4}>OBSERVAÇÕES</Text>
@@ -173,6 +194,12 @@ export function MetadePizza({ navigation }: any) {
             />
           </View>
           {/* OBSERVAÇÕES */}
+          <View style={styles.flexStretch}>
+            <View style={styles.box2}>
+              <Text style={styles.title2}>Valor :</Text>
+              <Text style={styles.preco}>R$ {precoP2}</Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
 
@@ -186,8 +213,29 @@ export function MetadePizza({ navigation }: any) {
 
       <View style={styles.footer}>
         <TouchableOpacity
+          style={styles.btn}
           onPress={() => {
-            alert("Adicionado ao carrinho");
+            testeVariaveis();
+          }}
+        >
+          <Text style={styles.btnTxt}>Variaveis</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            adicionarAoCarrinho(
+              tipoP,
+              quantidadeP,
+              idpizzaP1,
+              nomeProdutoP1,
+              descricaoP1,
+              precoP1,
+              observacaoP1,
+              idpizzaP2,
+              nomeProdutoP2,
+              descricaoP2,
+              precoP2,
+              obsP2
+            );
             navigation.navigate("Pedido");
           }}
           style={styles.btn}
@@ -373,26 +421,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-
-const db = SQLite.openDatabase("pizzariaromero.banco");
-
-function adicionarPedido(idproduto, nomeproduto, preco) {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "create table if not exists pedido(id integer primary key,idpedido int, nomeproduto text, preco text, foto text);"
-    );
-  });
-
-  db.transaction((tx) => {
-    tx.executeSql(
-      "insert into itens(idproduto,nomeproduto, preco,foto)values(?,?,?,?)",
-      [idproduto, nomeproduto, preco, foto1]
-    );
-
-    //tx.executeSql("drop table itens");
-
-    tx.executeSql("select * from itens", [], (_, { rows }) => {
-      console.log(JSON.stringify(rows));
-    });
-  });
-}

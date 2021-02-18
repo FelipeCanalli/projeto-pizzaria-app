@@ -234,6 +234,7 @@ export function DetalhesProduto({ navigation }: any) {
                 descricao1: `${descricao}`,
                 preco1: `${preco}`,
                 observacao1: `${observacao}`,
+                quantidade1: `${quantidade}`,
               });
             }}
           >

@@ -19,6 +19,7 @@ const Stack = createStackNavigator();
 
 let idpizza1 = 0;
 let tipo = "";
+let QuantidadeP = 0;
 let nomeProdutoP1 = "";
 let descricaoP1 = "";
 let precoP1 = 0;
@@ -145,6 +146,7 @@ function Metade({ navigation }: any) {
                   onPress={() => {
                     navigation.navigate("MetadePizza", {
                       tipo: `${tipo}`,
+                      quantidade: `${quantidadeP1}`,
                       idpizza1: `${idpizza1}`,
                       nomeProduto1: `${nomeProdutoP1}`,
                       descricao1: `${descricaoP1}`,

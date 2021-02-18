@@ -1,1 +1,2 @@
-export const host = "http://192.168.0.23/projeto-integrador-pizza";
+export const host =
+  "http://10.26.45.32/felipegalvaocanalli/projeto-integrador-pizza";

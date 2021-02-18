@@ -11,6 +11,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import Produtos from "../screens/ProdutosScreen";
+import Testes from "../screens/TestesScreen";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,11 @@ export default function HomeScreen() {
           headerShown: false,
           headerTitle: "Pizzaria Romero",
         }}
+      />
+      <Stack.Screen
+        name="Testes"
+        component={Testes}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -69,6 +75,15 @@ function Home({ navigation }: any) {
             style={styles.btn1}
           >
             <Text style={styles.bt1Txt}>Informações</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Testes");
+            }}
+            style={styles.btn1}
+          >
+            <Text style={styles.bt1Txt}>Testes</Text>
           </TouchableOpacity>
           <View style={styles.box}>
             <Text style={styles.title}>Horários de Funcionamento :</Text>
