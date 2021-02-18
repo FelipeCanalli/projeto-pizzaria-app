@@ -31,7 +31,6 @@ function Pedido({ navigation }: any) {
       </View>
       <View style={styles.main}>
         <Text style={styles.title}>Tela Pedido</Text>
-        <Text style={styles.title}>Tela Pedido</Text>
       </View>
 
       <View style={styles.footer}>

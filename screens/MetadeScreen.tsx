@@ -13,21 +13,45 @@ import {
 import { host } from "../config/host";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
-import DetalhesProduto from "./DetalhesProdutoScreen";
+import MetadePizza from "./MetadePizzaScreen";
 
 const Stack = createStackNavigator();
 
-export default function ProdutosScreen() {
+let idpizza1 = 0;
+let tipo = "";
+let nomeProdutoP1 = "";
+let descricaoP1 = "";
+let precoP1 = 0;
+let quantidadeP1 = 1;
+let observacaoP1 = "";
+
+export default function MetadeScreen({ route }: any) {
+  const { idproduto1 } = route.params;
+  const { tipo1 } = route.params;
+  const { nomeProduto1 } = route.params;
+  const { descricao1 } = route.params;
+  const { preco1 } = route.params;
+  const { quantidade1 } = route.params;
+  const { observacao1 } = route.params;
+
+  idpizza1 = idproduto1;
+  tipo = tipo1;
+  nomeProdutoP1 = nomeProduto1;
+  descricaoP1 = descricao1;
+  precoP1 = preco1;
+  quantidadeP1 = quantidade1;
+  observacaoP1 = observacao1;
+
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Produtos"
-        component={Produtos}
+        name="Metade"
+        component={Metade}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="DetalhesProduto"
-        component={DetalhesProduto}
+        name="MetadePizza"
+        component={MetadePizza}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -40,7 +64,7 @@ const wait = (timeout: any) => {
   });
 };
 
-function Produtos({ navigation, route }: any) {
+function Metade({ navigation }: any) {
   const [carregando, setCarregando] = React.useState(true);
   const [dados, setDados] = React.useState([]);
   const [valor, setValor] = React.useState("0,00");
@@ -53,7 +77,7 @@ function Produtos({ navigation, route }: any) {
   }, []);
 
   React.useEffect(() => {
-    fetch(`${host}/service/produto/listar.php`, {
+    fetch(`${host}/service/produto/listarTipo.php?tipo=${tipo}`, {
       method: "GET",
       headers: {
         accept: "aplication/json",
@@ -88,14 +112,14 @@ function Produtos({ navigation, route }: any) {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Home");
+            navigation.navigate("DetalhesProduto");
           }}
         >
-          <Ionicons name="home" size={24} color="white" />
+          <Ionicons name="document-text" size={24} color="white" />
         </TouchableOpacity>
       </View>
       <ImageBackground
-        source={require("../assets/fundo.jpg")}
+        source={require("../assets/icon.png")}
         style={styles.background}
       >
         <View style={styles.main}>
@@ -119,8 +143,18 @@ function Produtos({ navigation, route }: any) {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("DetalhesProduto", {
-                      idproduto: `${item.idproduto}`,
+                    navigation.navigate("MetadePizza", {
+                      tipo: `${tipo}`,
+                      idpizza1: `${idpizza1}`,
+                      nomeProduto1: `${nomeProdutoP1}`,
+                      descricao1: `${descricaoP1}`,
+                      preco1: `${precoP1}`,
+                      observacao1: `${observacaoP1}`,
+                      // Metade 2
+                      idpizza2: `${item.idproduto}`,
+                      nomeProduto2: `${item.nomeproduto}`,
+                      descricao2: `${item.descricao}`,
+                      preco2: `${item.preco}`,
                     });
                   }}
                 >
@@ -204,7 +238,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: "100%",
-    height: "5%",
+    height: 45,
     paddingVertical: 10,
     justifyContent: "flex-start",
     paddingLeft: 20,
