@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Alert,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as SQLite from "expo-sqlite";
 
 import { Ionicons } from "@expo/vector-icons";
-import Pedido from "./PedidoScreen";
 
 const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
@@ -63,21 +63,18 @@ export default function MetadePizzaScreen({ route }: any) {
         component={MetadePizza}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Pedido"
-        component={Pedido}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   );
 }
 
 export function MetadePizza({ navigation }: any) {
   const [obsP2, setObservacaoP2] = React.useState("");
+  let precoP = precoP1++ + precoP2 / 2;
 
   function adicionarAoCarrinho(
     tipoP: any,
     quantidadeP: any,
+    precoP: any,
     idpizzaP1: any,
     nomeProdutoP1: any,
     descricaoP1: any,
@@ -91,16 +88,18 @@ export function MetadePizza({ navigation }: any) {
   ) {
     db.transaction((tx) => {
       tx.executeSql(
-        "create table if not exists carrinho(id integer primary key, tipoP text, quantidadeP text, idpizzaP1 text, nomeProdutoP1 text, descricaoP1 text,precoP1 text,observacaoP1 text,idpizzaP2  text, nomeProdutoP2 text, descricaoP2 text, precoP2 text,observacaoP2 text );"
+        "create table if not exists carrinho(id integer primary key, tipoP text, quantidadeP text, precoP text, idpizzaP1 text, nomeProdutoP1 text, descricaoP1 text,precoP1 text,observacaoP1 text,idpizzaP2  text, nomeProdutoP2 text, descricaoP2 text, precoP2 text,observacaoP2 text );"
       );
     });
 
     db.transaction((tx) => {
       tx.executeSql(
-        "insert into carrinho(tipoP,quantidadeP, idpizzaP1,nomeProdutoP1,descricaoP1, precoP1, observacaoP1, idpizzaP2,nomeProdutoP2, descricaoP2, precoP2,observacaoP2 )values(?,?,?,?,?,?,?,?,?,?,?,?)",
+        "insert into carrinho(tipoP,quantidadeP,precoP, idpizzaP1,nomeProdutoP1,descricaoP1, precoP1, observacaoP1, idpizzaP2,nomeProdutoP2, descricaoP2, precoP2,observacaoP2 )values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
+
         [
           tipoP,
           quantidadeP,
+          precoP,
           idpizzaP1,
           nomeProdutoP1,
           descricaoP1,
@@ -124,14 +123,18 @@ export function MetadePizza({ navigation }: any) {
 
   function testeVariaveis() {
     alert(`
+    PRECO FINAL : R$ ${precoP.toFixed(2).replace(".", ",")}
     Tipo: ${tipoP} 
     Quantidade: ${quantidadeP}
     ID Pizza1: ${idpizzaP1}
     Nome: ${nomeProdutoP1}
     Descrição: ${descricaoP1}
+    preco : ${precoP1}
     Observação: ${observacaoP1}
     ID Pizza2: ${idpizzaP2}
+
     Nom: ${nomeProdutoP2}
+    preco : ${precoP2}
     Descrição: ${descricaoP2}
     Preço: ${precoP2}
     Observação: ${obsP2}
@@ -207,7 +210,7 @@ export function MetadePizza({ navigation }: any) {
         <Ionicons name="warning-sharp" size={24} color="#bf3434" />
 
         <Text style={styles.text2}>
-          O preço final a ser considerado é o produto com maior valor
+          O preço final a ser considerado a soma e divisão das metades
         </Text>
       </View>
 
@@ -225,6 +228,7 @@ export function MetadePizza({ navigation }: any) {
             adicionarAoCarrinho(
               tipoP,
               quantidadeP,
+              precoP.toFixed(2).replace(".", ","),
               idpizzaP1,
               nomeProdutoP1,
               descricaoP1,
@@ -236,7 +240,8 @@ export function MetadePizza({ navigation }: any) {
               precoP2,
               obsP2
             );
-            navigation.navigate("Pedido");
+            Alert.alert("Atenção", "Pizza adicionada ao carrinho");
+            navigation.navigate("Produtos");
           }}
           style={styles.btn}
         >

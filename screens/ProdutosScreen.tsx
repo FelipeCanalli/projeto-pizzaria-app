@@ -10,12 +10,14 @@ import {
   Alert,
   RefreshControl,
 } from "react-native";
+import * as SQLite from "expo-sqlite";
 import { host } from "../config/host";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import DetalhesProduto from "./DetalhesProdutoScreen";
 
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase("pizzariaromero.banco");
 
 export default function ProdutosScreen() {
   return (
@@ -43,7 +45,7 @@ const wait = (timeout: any) => {
 function Produtos({ navigation, route }: any) {
   const [carregando, setCarregando] = React.useState(true);
   const [dados, setDados] = React.useState([]);
-  const [valor, setValor] = React.useState("0,00");
+  const [valor, setValor] = React.useState(0);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -82,6 +84,20 @@ function Produtos({ navigation, route }: any) {
       //)
       .finally(() => setCarregando(false));
   }, []);
+
+  React.useEffect(() => {
+    db.transaction((tx) => {
+      // Fazendo a soma dos valores dos produtos que estão no carrinho
+      tx.executeSql(
+        "select sum(precoP) as total from carrinho",
+        [],
+        (_, { rows: { _array } }) => {
+          setValor(_array[0].total.toFixed(2).replace(".", ","));
+          // console.log(_array[0]);
+        }
+      );
+    });
+  });
 
   return (
     <View style={styles.container}>
