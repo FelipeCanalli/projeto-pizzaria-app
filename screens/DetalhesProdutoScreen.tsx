@@ -3,10 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
-  ActivityIndicator,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { host } from "../config/host";
@@ -15,15 +14,30 @@ import { RadioButton } from "react-native-paper";
 import Pedido from "./PedidoScreen";
 import Metade from "./MetadeScreen";
 import * as SQLite from "expo-sqlite";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
 
-let id = 0;
+let idproduto = 0;
+let tipo = "";
+let nomeproduto = "";
+let descricao = "";
+let preco = 0;
 
 export default function DetalhesProdutoScreen({ route }: any) {
-  const { idproduto } = route.params;
-  id = idproduto;
+  const { idproduto1 } = route.params;
+  const { tipo1 } = route.params;
+  const { nomeproduto1 } = route.params;
+  const { descricao1 } = route.params;
+  const { preco1 } = route.params;
+
+  idproduto = idproduto1;
+  tipo = tipo1;
+  nomeproduto = nomeproduto1;
+  descricao = descricao1;
+  preco = preco1;
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -47,48 +61,12 @@ export default function DetalhesProdutoScreen({ route }: any) {
 
 export function DetalhesProduto({ navigation }: any) {
   const [carregando, setCarregando] = React.useState(true);
-  const [dados, setDados] = React.useState([]);
-
   const [partes, setPartes] = React.useState(false);
-
-  const [tipo, setTipo] = React.useState("teste");
-  const [nomeProduto, setNomeProduto] = React.useState("teste");
-  const [descricao, setDescricao] = React.useState("");
-  const [preco, setPreco] = React.useState(0.0);
   const [quantidade, setQuantidade] = React.useState(1);
   const [observacao, setObservacao] = React.useState("");
 
   if (quantidade < 1) {
     setQuantidade(1);
-  }
-
-  React.useEffect(() => {
-    fetch(`${host}/service/produto/detalhar.php?idproduto=${id}`, {
-      method: "GET",
-      headers: {
-        accept: "aplication/json",
-        "content-type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((produto) => {
-        setDados(produto.saida);
-        console.log(dados);
-      })
-      .catch((error) => console.error(`Erro ao carregar a API ${error}`))
-      .finally(() => setCarregando(false));
-  }, []);
-
-  function testeVariaveis() {
-    alert(`
-    tipo : ${tipo}
-    id : ${id}
-    nome : ${nomeProduto}
-    descrição : ${descricao}
-    preco : ${preco}
-    observação : ${observacao}
-    quantidade : ${quantidade}
-    `);
   }
 
   function adicionarAoCarrinho(
@@ -131,224 +109,187 @@ export function DetalhesProduto({ navigation }: any) {
     });
   }
 
+  const wait = (timeout: any) => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, timeout);
+    });
+  };
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Produtos");
-          }}
-        >
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-      </View>
-      {carregando ? (
-        <ActivityIndicator
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          size="large"
-          color="#AB1900"
-        />
-      ) : (
-        <FlatList
-          data={dados}
-          renderItem={({ item }) => (
-            <View>
-              <Text style={styles.title}>{item.tipo}</Text>
-              <Text style={styles.title}>{item.nomeproduto}</Text>
+      <ScrollView
+        horizontal={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={styles.header}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Produtos");
+            }}
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
 
-              <View style={styles.boxBranca}>
-                <Text style={styles.text}>{item.descricao}</Text>
-              </View>
+        <View>
+          <Text style={styles.title}>{tipo}</Text>
+          <Text style={styles.title}>{nomeproduto}</Text>
 
-              <View style={styles.separator} />
+          <View style={styles.boxBranca}>
+            <Text style={styles.text}>{descricao}</Text>
+          </View>
 
-              <View style={styles.boxBranca}>
-                <View style={styles.flexRow}>
-                  <View style={styles.flexStretch}>
-                    <View style={styles.box2}>
-                      <Text style={styles.title2}>Quantidade :</Text>
-                      <View style={[styles.boxQuantidade]}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setQuantidade(quantidade - 1);
-                          }}
-                        >
-                          <Ionicons
-                            name="remove-circle"
-                            size={30}
-                            color="#AB1900"
-                          />
-                        </TouchableOpacity>
+          <View style={styles.separator} />
 
-                        <Text
-                          style={{
-                            color: "black",
-                            fontWeight: "bold",
-                            fontSize: 20,
-                            padding: 7,
-                          }}
-                        >
-                          {quantidade}
-                        </Text>
-
-                        <TouchableOpacity
-                          onPress={() => {
-                            setQuantidade(quantidade + 1);
-                          }}
-                        >
-                          <Ionicons
-                            name="add-circle"
-                            size={30}
-                            color="#AB1900"
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-
-                    <View style={styles.box2}>
-                      <Text style={styles.title2}>Valor :</Text>
-                      <Text style={styles.preco}>R$ {item.preco}</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.flexStretch}>
-                    <View style={styles.box2}>
-                      <Text style={styles.title2}>Pizza :</Text>
-
-                      <View style={[styles.flexRow, styles.btnRadio]}>
-                        <RadioButton
-                          color="#AB1900"
-                          value="false"
-                          status={partes === false ? "checked" : "unchecked"}
-                          onPress={() => setPartes(false)}
-                        />
-                        <Text style={styles.title3}>Inteira</Text>
-                      </View>
-                      <View style={[styles.flexRow, styles.btnRadio]}>
-                        <RadioButton
-                          color="#AB1900"
-                          value="true"
-                          status={partes === true ? "checked" : "unchecked"}
-                          onPress={() => {
-                            setPartes(true),
-                              setTipo(item.tipo),
-                              setNomeProduto(item.nomeproduto),
-                              setDescricao(item.descricao),
-                              setPreco(item.preco);
-                          }}
-                        />
-                        <Text style={styles.title3}>Meio a meio</Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-
-                {/* OBSERVAÇÕES */}
-                <View style={styles.flexStretch}>
-                  <Text style={styles.title}>OBSERVAÇÕES</Text>
-                  <TextInput
-                    multiline
-                    numberOfLines={2}
-                    style={styles.TextInput}
-                    editable
-                    maxLength={80}
-                    value={observacao}
-                    onChangeText={(text) => setObservacao(text)}
-                  />
-                </View>
-                {/* OBSERVAÇÕES */}
-              </View>
-
-              {/* TESTE */}
-
-              <View style={styles.footer}>
-                {partes ? (
-                  <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => {
-                      navigation.navigate("Metade", {
-                        idproduto1: `${id}`,
-                        tipo1: `${tipo}`,
-                        nomeProduto1: `${nomeProduto}`,
-                        descricao1: `${descricao}`,
-                        preco1: `${preco}`,
-                        observacao1: `${observacao}`,
-                        quantidade1: `${quantidade}`,
-                      });
-                    }}
-                  >
-                    <Text style={styles.btnTxt}>
-                      {" "}
+          <View style={styles.boxBranca}>
+            <View style={styles.flexRow}>
+              <View style={styles.flexStretch}>
+                <View style={styles.box2}>
+                  <Text style={styles.title2}>Quantidade :</Text>
+                  <View style={[styles.boxQuantidade]}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setQuantidade(quantidade - 1);
+                      }}
+                    >
                       <Ionicons
-                        name="add-circle-sharp"
-                        size={20}
+                        name="remove-circle"
+                        size={30}
                         color="#AB1900"
-                      />{" "}
-                      Escolher a outra Parte
-                    </Text>
-                  </TouchableOpacity>
-                ) : (
-                  <View style={[styles.flexRow]}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setTipo(item.tipo);
-                        setNomeProduto(item.nomeproduto),
-                          setDescricao(item.descricao),
-                          setPreco(item.preco);
-                        setTimeout(() => {
-                          testeVariaveis();
-                        }, 1000);
-                      }}
-                      style={styles.btn}
-                    >
-                      <Text style={styles.btnTxt}>variaveis </Text>
+                      />
                     </TouchableOpacity>
 
+                    <Text
+                      style={{
+                        color: "black",
+                        fontWeight: "bold",
+                        fontSize: 20,
+                        padding: 7,
+                      }}
+                    >
+                      {quantidade}
+                    </Text>
+
                     <TouchableOpacity
                       onPress={() => {
-                        setTipo(item.tipo),
-                          setNomeProduto(item.nomeproduto),
-                          setDescricao(item.descricao),
-                          setPreco(item.preco);
-
-                        navigation.navigate("Pedido");
-
-                        adicionarAoCarrinho(
-                          tipo,
-                          quantidade,
-                          preco,
-                          id,
-                          nomeProduto,
-                          descricao,
-                          preco,
-                          observacao
-                        );
+                        setQuantidade(quantidade + 1);
                       }}
-                      style={styles.btn}
                     >
-                      <Text style={styles.btnTxt}>
-                        <Ionicons
-                          name="add-circle-sharp"
-                          size={20}
-                          color="#AB1900"
-                        />{" "}
-                        Adicionar ao Pedido
-                      </Text>
+                      <Ionicons name="add-circle" size={30} color="#AB1900" />
                     </TouchableOpacity>
                   </View>
-                )}
+                </View>
+
+                <View style={styles.box2}>
+                  <Text style={styles.title2}>Valor :</Text>
+                  <Text style={styles.preco}>R$ {preco}</Text>
+                </View>
               </View>
 
-              {/* fim teste */}
+              <View style={styles.flexStretch}>
+                <View style={styles.box2}>
+                  <Text style={styles.title2}>Pizza :</Text>
+
+                  <View style={[styles.flexRow, styles.btnRadio]}>
+                    <RadioButton
+                      color="#AB1900"
+                      value="false"
+                      status={partes === false ? "checked" : "unchecked"}
+                      onPress={() => setPartes(false)}
+                    />
+                    <Text style={styles.title3}>Inteira</Text>
+                  </View>
+                  <View style={[styles.flexRow, styles.btnRadio]}>
+                    <RadioButton
+                      color="#AB1900"
+                      value="true"
+                      status={partes === true ? "checked" : "unchecked"}
+                      onPress={() => {
+                        setPartes(true);
+                      }}
+                    />
+                    <Text style={styles.title3}>Meio a meio</Text>
+                  </View>
+                </View>
+              </View>
             </View>
-          )}
-          keyExtractor={({ idproduto }, index) => idproduto}
-        />
-      )}
+
+            {/* OBSERVAÇÕES */}
+            <View style={styles.flexStretch}>
+              <Text style={styles.title}>OBSERVAÇÕES</Text>
+              <TextInput
+                multiline
+                numberOfLines={2}
+                style={styles.TextInput}
+                editable
+                maxLength={80}
+                value={observacao}
+                onChangeText={(text) => setObservacao(text)}
+              />
+            </View>
+            {/* OBSERVAÇÕES */}
+          </View>
+        </View>
+      </ScrollView>
+      <View style={styles.footer}>
+        {partes ? (
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              navigation.navigate("Metade", {
+                idproduto1: `${idproduto}`,
+                tipo1: `${tipo}`,
+                nomeProduto1: `${nomeproduto}`,
+                descricao1: `${descricao}`,
+                preco1: `${preco}`,
+                observacao1: `${observacao}`,
+                quantidade1: `${quantidade}`,
+              });
+            }}
+          >
+            <Text style={styles.btnTxt}>
+              {" "}
+              <Ionicons
+                name="add-circle-sharp"
+                size={20}
+                color="#AB1900"
+              />{" "}
+              Escolher a outra Parte
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              adicionarAoCarrinho(
+                tipo,
+                quantidade,
+                preco,
+                idproduto,
+                nomeproduto,
+                descricao,
+                preco,
+                observacao
+              );
+              navigation.navigate("Pedido");
+            }}
+            style={styles.btn}
+          >
+            <Text style={styles.btnTxt}>
+              <Ionicons name="add-circle-sharp" size={20} color="#AB1900" />{" "}
+              Adicionar ao Pedido
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }
@@ -447,7 +388,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
-    marginTop: "65%",
     width: "100%",
     height: 45,
     paddingVertical: 10,

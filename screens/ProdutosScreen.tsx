@@ -142,7 +142,11 @@ function Produtos({ navigation, route }: any) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("DetalhesProduto", {
-                      idproduto: `${item.idproduto}`,
+                      idproduto1: `${item.idproduto}`,
+                      tipo1: `${item.tipo}`,
+                      nomeproduto1: `${item.nomeproduto}`,
+                      descricao1: `${item.descricao}`,
+                      preco1: `${item.preco}`,
                     });
                   }}
                 >

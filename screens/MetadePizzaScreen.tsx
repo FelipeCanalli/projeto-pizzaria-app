@@ -69,7 +69,7 @@ export default function MetadePizzaScreen({ route }: any) {
 
 export function MetadePizza({ navigation }: any) {
   const [obsP2, setObservacaoP2] = React.useState("");
-  let precoP = precoP1++ + precoP2 / 2;
+  let precoP = 0; //precoP1++ + precoP2 / 2
 
   function adicionarAoCarrinho(
     tipoP: any,
@@ -123,18 +123,21 @@ export function MetadePizza({ navigation }: any) {
 
   function testeVariaveis() {
     alert(`
-    PRECO FINAL : R$ ${precoP.toFixed(2).replace(".", ",")}
+    PRECO FINAL : R$ ${
+      precoP
+      //.toFixed(2).replace(".", ","      )
+    }
     Tipo: ${tipoP} 
     Quantidade: ${quantidadeP}
+
     ID Pizza1: ${idpizzaP1}
     Nome: ${nomeProdutoP1}
     Descrição: ${descricaoP1}
-    preco : ${precoP1}
+    Preço : ${precoP1}
     Observação: ${observacaoP1}
-    ID Pizza2: ${idpizzaP2}
 
-    Nom: ${nomeProdutoP2}
-    preco : ${precoP2}
+    ID Pizza2: ${idpizzaP2}
+    Nome: ${nomeProdutoP2}
     Descrição: ${descricaoP2}
     Preço: ${precoP2}
     Observação: ${obsP2}

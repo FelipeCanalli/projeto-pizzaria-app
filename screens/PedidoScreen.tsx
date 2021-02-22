@@ -15,6 +15,11 @@ import * as SQLite from "expo-sqlite";
 
 const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
+const wait = (timeout: any) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+};
 
 export default function PedidoScreen() {
   return (
@@ -35,7 +40,7 @@ function Pedido({ navigation }: any) {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    wait(1000).then(() => setRefreshing(false));
   }, []);
 
   React.useEffect(() => {
@@ -72,16 +77,50 @@ function Pedido({ navigation }: any) {
           <Ionicons name="document-text" size={24} color="white" />
         </TouchableOpacity>
       </View>
-      <View style={styles.main}>
-        <ScrollView>
-          <Text style={styles.title}>Veja o que tem em seu pedido</Text>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        horizontal={false}
+        style={{ flex: 1, width: "100%" }}
+      >
+        <Text style={styles.title}>
+          {" "}
+          <Ionicons
+            name="arrow-down-circle-sharp"
+            size={24}
+            color="#000"
+          />{" "}
+          Produtos no Pedido
+        </Text>
+        <View style={styles.separator} />
 
-          {dados.map(({ id, idpizzaP1, precoP1, nomeProdutoP1 }) => (
-            <View key={id} style={{ margin: 20 }}>
+        {dados.map(
+          ({
+            id,
+            tipoP,
+            quantidadeP,
+            PrecoP,
+            idpizzaP1,
+            nomeProdutoP1,
+            descricaoP1,
+            precoP1,
+            observacaoP1,
+            idpizza2,
+            nomeProdutoP2,
+            descricaoP2,
+            precoP2,
+            observacaoP2,
+            length,
+          }) => (
+            <View key={id}>
               <View style={styles.boxBranca}>
-                <Text style={styles.btnTxt}>ID: {idpizzaP1}</Text>
-                <Text style={styles.btnTxt}>Produto: {nomeProdutoP1}</Text>
-                <Text style={styles.btnTxt}>Preço: R$ {precoP1}</Text>
+                <Text style={styles.btnTxt3}>{tipoP}</Text>
+                <Text style={styles.btnTxt4}>{nomeProdutoP1}</Text>
+                <Text style={styles.btnTxt5}>{descricaoP1}</Text>
+                <Text style={styles.btnTxt4}>{nomeProdutoP2}</Text>
+                <Text style={styles.btnTxt5}>{descricaoP2}</Text>
+
                 <TouchableOpacity>
                   <Text
                     style={styles.btnTxt}
@@ -103,9 +142,9 @@ function Pedido({ navigation }: any) {
                 </TouchableOpacity>
               </View>
             </View>
-          ))}
-        </ScrollView>
-      </View>
+          )
+        )}
+      </ScrollView>
 
       <View style={styles.footer}>
         <TouchableOpacity>
@@ -148,12 +187,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#AB1900",
     flexDirection: "row",
   },
+  separator: {
+    margin: 10,
+    height: 2.3,
+    width: "90%",
+    backgroundColor: "black",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
   title: {
-    textAlign: "center",
+    marginLeft: 20,
+    justifyContent: "center",
     color: "black",
     fontSize: 24,
     fontWeight: "bold",
-    margin: 10,
+    marginTop: 10,
   },
   footer: {
     width: "100%",
@@ -182,12 +230,36 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginRight: "30%",
   },
+  btnTxt3: {
+    color: "#ffff",
+    backgroundColor: "#AB1900",
+    fontWeight: "bold",
+    fontSize: 12,
+    borderRadius: 20,
+  },
+  btnTxt4: {
+    color: "#006B31",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  btnTxt5: {
+    color: "#CBCBCB",
+    fontWeight: "bold",
+    fontSize: 15,
+    paddingVertical: 6,
+  },
+
   boxBranca: {
     width: "90%",
-    padding: 10,
+    borderRadius: 10,
+    padding: 20,
+
     backgroundColor: "white",
     marginLeft: "auto",
     marginRight: "auto",
-    borderRadius: 2,
+  },
+  box2: {
+    borderRadius: 10,
+    backgroundColor: "#AB1900",
   },
 });

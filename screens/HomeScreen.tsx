@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,16 @@ import {
   Image,
   ImageBackground,
   ScrollView,
+  Alert,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import Produtos from "../screens/ProdutosScreen";
 import Testes from "../screens/TestesScreen";
+import * as SQLite from "expo-sqlite";
 
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase("pizzariaromero.banco");
 
 export default function HomeScreen() {
   return (
@@ -41,6 +44,13 @@ export default function HomeScreen() {
 }
 
 function Home({ navigation }: any) {
+  useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql("drop table carrinho");
+    });
+    Alert.alert("Atenção", "Informações atualizadas com sucesso !");
+    console.log("## Tabela apagada ##");
+  });
   return (
     <View style={styles.container}>
       <ImageBackground
