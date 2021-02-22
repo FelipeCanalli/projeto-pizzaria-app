@@ -15,6 +15,7 @@ import { host } from "../config/host";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import DetalhesProduto from "./DetalhesProdutoScreen";
+import Pedido from "./PedidoScreen";
 
 const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
@@ -30,6 +31,11 @@ export default function ProdutosScreen() {
       <Stack.Screen
         name="DetalhesProduto"
         component={DetalhesProduto}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Pedido"
+        component={Pedido}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -167,6 +173,19 @@ function Produtos({ navigation, route }: any) {
         <TouchableOpacity>
           <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={() => {
+            navigation.navigate("Pedido");
+          }}
+        >
+          <Text style={styles.btnTxt2}>
+            {" "}
+            <Ionicons name="document-text" size={24} color="#AB1900" /> Ver
+            pedido
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -202,6 +221,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
   },
+  btn: {
+    backgroundColor: "#FBD721",
+    textAlign: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    marginRight: 20,
+  },
+  btnTxt: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginRight: "35%",
+  },
+  btnTxt2: {
+    color: "#AB1900",
+    fontWeight: "bold",
+    fontSize: 20,
+    padding: 10,
+  },
   box: {
     padding: 10,
     margin: 7,
@@ -222,14 +260,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "5%",
     paddingVertical: 10,
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
     paddingLeft: 20,
     backgroundColor: "#AB1900",
     flexDirection: "row",
-  },
-  btnTxt: {
-    color: "#ffffff",
-    fontWeight: "bold",
-    fontSize: 20,
   },
 });

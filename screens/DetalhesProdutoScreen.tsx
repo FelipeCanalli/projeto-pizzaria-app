@@ -14,8 +14,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { RadioButton } from "react-native-paper";
 import Pedido from "./PedidoScreen";
 import Metade from "./MetadeScreen";
+import * as SQLite from "expo-sqlite";
 
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase("pizzariaromero.banco");
 
 let id = 0;
 
@@ -49,10 +51,10 @@ export function DetalhesProduto({ navigation }: any) {
 
   const [partes, setPartes] = React.useState(false);
 
-  const [tipo, setTipo] = React.useState("");
-  const [nomeProduto, setNomeProduto] = React.useState("");
+  const [tipo, setTipo] = React.useState("teste");
+  const [nomeProduto, setNomeProduto] = React.useState("teste");
   const [descricao, setDescricao] = React.useState("");
-  const [preco, setPreco] = React.useState(0);
+  const [preco, setPreco] = React.useState(0.0);
   const [quantidade, setQuantidade] = React.useState(1);
   const [observacao, setObservacao] = React.useState("");
 
@@ -76,6 +78,58 @@ export function DetalhesProduto({ navigation }: any) {
       .catch((error) => console.error(`Erro ao carregar a API ${error}`))
       .finally(() => setCarregando(false));
   }, []);
+
+  function testeVariaveis() {
+    alert(`
+    tipo : ${tipo}
+    id : ${id}
+    nome : ${nomeProduto}
+    descrição : ${descricao}
+    preco : ${preco}
+    observação : ${observacao}
+    quantidade : ${quantidade}
+    `);
+  }
+
+  function adicionarAoCarrinho(
+    tipoP: any,
+    quantidadeP: any,
+    precoP: any,
+    idpizzaP1: any,
+    nomeProdutoP1: any,
+    descricaoP1: any,
+    precoP1: any,
+    observacaoP1: any
+  ) {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "create table if not exists carrinho(id integer primary key, tipoP text, quantidadeP text, precoP text, idpizzaP1 text, nomeProdutoP1 text, descricaoP1 text,precoP1 text,observacaoP1 text,idpizzaP2  text, nomeProdutoP2 text, descricaoP2 text, precoP2 text,observacaoP2 text );"
+      );
+    });
+
+    db.transaction((tx) => {
+      tx.executeSql(
+        "insert into carrinho(tipoP,quantidadeP,precoP, idpizzaP1,nomeProdutoP1,descricaoP1, precoP1, observacaoP1)values(?,?,?,?,?,?,?,?)",
+
+        [
+          tipoP,
+          quantidadeP,
+          precoP,
+          idpizzaP1,
+          nomeProdutoP1,
+          descricaoP1,
+          precoP1,
+          observacaoP1,
+        ]
+      );
+
+      // tx.executeSql("drop table carrinho");
+
+      tx.executeSql("select * from carrinho", [], (_, { rows }) => {
+        console.log(JSON.stringify(rows));
+      });
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -185,14 +239,6 @@ export function DetalhesProduto({ navigation }: any) {
                               setNomeProduto(item.nomeproduto),
                               setDescricao(item.descricao),
                               setPreco(item.preco);
-                            // alert(`
-                            // Tipo : ${tipo}
-                            // Nome : ${nomeProduto}
-                            // Descrição : ${descricao}
-                            // Preço : ${preco}
-                            // Quantidade: ${quantidade}
-                            // Obs: ${observacao}
-                            // `)
                           }}
                         />
                         <Text style={styles.title3}>Meio a meio</Text>
@@ -216,53 +262,93 @@ export function DetalhesProduto({ navigation }: any) {
                 </View>
                 {/* OBSERVAÇÕES */}
               </View>
+
+              {/* TESTE */}
+
+              <View style={styles.footer}>
+                {partes ? (
+                  <TouchableOpacity
+                    style={styles.btn}
+                    onPress={() => {
+                      navigation.navigate("Metade", {
+                        idproduto1: `${id}`,
+                        tipo1: `${tipo}`,
+                        nomeProduto1: `${nomeProduto}`,
+                        descricao1: `${descricao}`,
+                        preco1: `${preco}`,
+                        observacao1: `${observacao}`,
+                        quantidade1: `${quantidade}`,
+                      });
+                    }}
+                  >
+                    <Text style={styles.btnTxt}>
+                      {" "}
+                      <Ionicons
+                        name="add-circle-sharp"
+                        size={20}
+                        color="#AB1900"
+                      />{" "}
+                      Escolher a outra Parte
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={[styles.flexRow]}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setTipo(item.tipo);
+                        setNomeProduto(item.nomeproduto),
+                          setDescricao(item.descricao),
+                          setPreco(item.preco);
+                        setTimeout(() => {
+                          testeVariaveis();
+                        }, 1000);
+                      }}
+                      style={styles.btn}
+                    >
+                      <Text style={styles.btnTxt}>variaveis </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        setTipo(item.tipo),
+                          setNomeProduto(item.nomeproduto),
+                          setDescricao(item.descricao),
+                          setPreco(item.preco);
+
+                        navigation.navigate("Pedido");
+
+                        adicionarAoCarrinho(
+                          tipo,
+                          quantidade,
+                          preco,
+                          id,
+                          nomeProduto,
+                          descricao,
+                          preco,
+                          observacao
+                        );
+                      }}
+                      style={styles.btn}
+                    >
+                      <Text style={styles.btnTxt}>
+                        <Ionicons
+                          name="add-circle-sharp"
+                          size={20}
+                          color="#AB1900"
+                        />{" "}
+                        Adicionar ao Pedido
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+
+              {/* fim teste */}
             </View>
           )}
           keyExtractor={({ idproduto }, index) => idproduto}
         />
       )}
-
-      <View style={styles.footer}>
-        {partes ? (
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => {
-              navigation.navigate("Metade", {
-                idproduto1: `${id}`,
-                tipo1: `${tipo}`,
-                nomeProduto1: `${nomeProduto}`,
-                descricao1: `${descricao}`,
-                preco1: `${preco}`,
-                observacao1: `${observacao}`,
-                quantidade1: `${quantidade}`,
-              });
-            }}
-          >
-            <Text style={styles.btnTxt}>
-              {" "}
-              <Ionicons
-                name="add-circle-sharp"
-                size={20}
-                color="#AB1900"
-              />{" "}
-              Escolher a outra Parte
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              alert("Observação = " + observacao);
-              navigation.navigate("Pedido");
-            }}
-            style={styles.btn}
-          >
-            <Text style={styles.btnTxt}>
-              <Ionicons name="add-circle-sharp" size={20} color="#AB1900" />{" "}
-              Adicionar ao Pedido
-            </Text>
-          </TouchableOpacity>
-        )}
-      </View>
     </View>
   );
 }
@@ -361,6 +447,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
+    marginTop: "65%",
     width: "100%",
     height: 45,
     paddingVertical: 10,
