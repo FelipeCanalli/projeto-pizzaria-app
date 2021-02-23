@@ -8,7 +8,6 @@ import {
   RefreshControl,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { host } from "../config/host";
 import { Ionicons } from "@expo/vector-icons";
 import { RadioButton } from "react-native-paper";
 import Pedido from "./PedidoScreen";
@@ -60,7 +59,6 @@ export default function DetalhesProdutoScreen({ route }: any) {
 }
 
 export function DetalhesProduto({ navigation }: any) {
-  const [carregando, setCarregando] = React.useState(true);
   const [partes, setPartes] = React.useState(false);
   const [quantidade, setQuantidade] = React.useState(1);
   const [observacao, setObservacao] = React.useState("");

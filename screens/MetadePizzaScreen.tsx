@@ -17,6 +17,7 @@ const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
 
 let tipoP = "";
+let precoP = 0;
 let quantidadeP = 0;
 let idpizzaP1 = 0;
 let observacaoP1 = "";
@@ -31,6 +32,7 @@ let precoP2 = 0;
 
 export default function MetadePizzaScreen({ route }: any) {
   const { tipo } = route.params;
+  const { preco } = route.params;
   const { quantidade } = route.params;
   const { idpizza1 } = route.params;
   const { nomeProduto1 } = route.params;
@@ -44,6 +46,7 @@ export default function MetadePizzaScreen({ route }: any) {
   const { preco2 } = route.params;
 
   tipoP = tipo;
+  precoP = preco;
   quantidadeP = quantidade;
   nomeProdutoP1 = nomeProduto1;
   descricaoP1 = descricao1;
@@ -69,7 +72,6 @@ export default function MetadePizzaScreen({ route }: any) {
 
 export function MetadePizza({ navigation }: any) {
   const [obsP2, setObservacaoP2] = React.useState("");
-  let precoP = 0; //precoP1++ + precoP2 / 2
 
   function adicionarAoCarrinho(
     tipoP: any,

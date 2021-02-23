@@ -17,13 +17,12 @@ import MetadePizza from "./MetadePizzaScreen";
 
 const Stack = createStackNavigator();
 
-let idpizza1 = 0;
 let tipo = "";
-let QuantidadeP = 0;
+let quantidade = 1;
+let idpizza1 = 0;
 let nomeProdutoP1 = "";
 let descricaoP1 = "";
 let precoP1 = 0;
-let quantidadeP1 = 1;
 let observacaoP1 = "";
 
 export default function MetadeScreen({ route }: any) {
@@ -37,10 +36,10 @@ export default function MetadeScreen({ route }: any) {
 
   idpizza1 = idproduto1;
   tipo = tipo1;
+  quantidade = quantidade1;
   nomeProdutoP1 = nomeProduto1;
   descricaoP1 = descricao1;
   precoP1 = preco1;
-  quantidadeP1 = quantidade1;
   observacaoP1 = observacao1;
 
   return (
@@ -68,7 +67,7 @@ const wait = (timeout: any) => {
 function Metade({ navigation }: any) {
   const [carregando, setCarregando] = React.useState(true);
   const [dados, setDados] = React.useState([]);
-  const [valor, setValor] = React.useState("0,00");
+  const [valor, setValor] = React.useState(0);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -146,7 +145,8 @@ function Metade({ navigation }: any) {
                   onPress={() => {
                     navigation.navigate("MetadePizza", {
                       tipo: `${tipo}`,
-                      quantidade: `${quantidadeP1}`,
+                      preco: +precoP1 / 2 + +item.preco / 2,
+                      quantidade: `${quantidade}`,
                       idpizza1: `${idpizza1}`,
                       nomeProduto1: `${nomeProdutoP1}`,
                       descricao1: `${descricaoP1}`,
@@ -173,7 +173,6 @@ function Metade({ navigation }: any) {
                         </Text>
                       </View>
                     </View>
-
                     <Text>{item.descricao}</Text>
                   </View>
                 </TouchableOpacity>

@@ -48,7 +48,7 @@ const wait = (timeout: any) => {
   });
 };
 
-function Produtos({ navigation, route }: any) {
+function Produtos({ navigation }: any) {
   const [carregando, setCarregando] = React.useState(true);
   const [dados, setDados] = React.useState([]);
   const [valor, setValor] = React.useState(0);
@@ -71,6 +71,7 @@ function Produtos({ navigation, route }: any) {
       .then((response) => response.json())
       .then((produto) => {
         setDados(produto.saida);
+        // console.log(produto.saida);
       })
       .catch((error) =>
         // console.log(
@@ -87,7 +88,6 @@ function Produtos({ navigation, route }: any) {
           { cancelable: false }
         )
       )
-      //)
       .finally(() => setCarregando(false));
   }, []);
 

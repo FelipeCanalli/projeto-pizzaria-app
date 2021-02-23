@@ -111,19 +111,18 @@ function Pedido({ navigation }: any) {
             descricaoP2,
             precoP2,
             observacaoP2,
-            length,
           }) => (
             <View key={id}>
               <View style={styles.boxBranca}>
-                <Text style={styles.btnTxt3}>{tipoP}</Text>
-                <Text style={styles.btnTxt4}>{nomeProdutoP1}</Text>
-                <Text style={styles.btnTxt5}>{descricaoP1}</Text>
-                <Text style={styles.btnTxt4}>{nomeProdutoP2}</Text>
-                <Text style={styles.btnTxt5}>{descricaoP2}</Text>
+                <View>
+                  <Text style={styles.btnTxt3}>{tipoP}</Text>
+                  <Text style={styles.btnTxt4}>{nomeProdutoP1}</Text>
+                  <Text style={styles.btnTxt5}>{descricaoP1}</Text>
+                  <Text style={styles.btnTxt4}>{nomeProdutoP2}</Text>
+                  <Text style={styles.btnTxt5}>{descricaoP2}</Text>
 
-                <TouchableOpacity>
-                  <Text
-                    style={styles.btnTxt}
+                  <TouchableOpacity
+                    style={styles.btn2}
                     onPress={() => {
                       db.transaction((tx) => {
                         tx.executeSql("delete from carrinho where id = ?", [
@@ -132,14 +131,16 @@ function Pedido({ navigation }: any) {
                       });
                     }}
                   >
-                    <Ionicons
-                      name="close-circle-sharp"
-                      size={20}
-                      color="#AB1900"
-                    />
-                    <Text> Remover do Carrinho</Text>
-                  </Text>
-                </TouchableOpacity>
+                    <Text style={styles.btnTxt6}>
+                      <Ionicons
+                        name="close-circle-sharp"
+                        size={20}
+                        color="#AB1900"
+                      />{" "}
+                      Remover do Carrinho
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           )
@@ -218,11 +219,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
   },
+  btn2: {
+    backgroundColor: "#FBD721",
+    textAlign: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
   btnTxt: {
     color: "#AB1900",
     fontWeight: "bold",
     fontSize: 20,
     padding: 10,
+  },
+  btnTxt6: {
+    color: "#AB1900",
+    fontWeight: "bold",
+    fontSize: 20,
+    padding: 1,
   },
   btnTxt2: {
     color: "#ffffff",
@@ -235,22 +248,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#AB1900",
     fontWeight: "bold",
     fontSize: 12,
+    width: 100,
     borderRadius: 20,
+    padding: 2,
+    textAlign: "center",
   },
   btnTxt4: {
     color: "#006B31",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 18,
+    padding: 0,
   },
   btnTxt5: {
     color: "#CBCBCB",
     fontWeight: "bold",
     fontSize: 15,
-    paddingVertical: 6,
+    padding: 0,
   },
 
   boxBranca: {
-    width: "90%",
     borderRadius: 10,
     padding: 20,
 
