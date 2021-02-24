@@ -115,7 +115,7 @@ function Metade({ navigation }: any) {
             navigation.navigate("DetalhesProduto");
           }}
         >
-          <Ionicons name="document-text" size={24} color="white" />
+          <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       </View>
       <ImageBackground

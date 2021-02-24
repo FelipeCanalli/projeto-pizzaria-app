@@ -44,13 +44,13 @@ export default function HomeScreen() {
 }
 
 function Home({ navigation }: any) {
-  useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql("drop table carrinho");
-    });
-    Alert.alert("Atenção", "Informações atualizadas com sucesso !");
-    console.log("## Tabela apagada ##");
-  });
+  // useEffect(() => {
+  //   db.transaction((tx) => {
+  //     tx.executeSql("drop table carrinho");
+  //   });
+  //   Alert.alert("Atenção", "Informações atualizadas com sucesso !");
+  //   console.log("## Tabela apagada ##");
+  // });
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -58,8 +58,16 @@ function Home({ navigation }: any) {
         style={styles.background}
       >
         <ScrollView horizontal={false}>
-          <Image source={require("../assets/icon.png")} style={styles.img1} />
-
+          <View
+            style={{
+              marginRight: "auto",
+              marginLeft: "auto",
+              flex: 1,
+              justifyContent: "center",
+            }}
+          >
+            <Image source={require("../assets/icon.png")} style={styles.img1} />
+          </View>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("Produtos");
@@ -121,16 +129,19 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
   },
   img1: {
+    justifyContent: "center",
+    marginRight: "auto",
+    marginLeft: "auto",
     resizeMode: "cover",
     width: 450,
     height: 300,
-    marginBottom: 100,
-    marginTop: 40,
+    marginBottom: "10%",
+    marginTop: "10%",
   },
   btn1: {
     padding: 22,
     margin: 20,
-    width: 300,
+    width: "70%",
     height: 50,
     alignItems: "center",
     justifyContent: "center",

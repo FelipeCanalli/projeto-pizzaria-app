@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ActivityIndicator,
   ScrollView,
   RefreshControl,
 } from "react-native";
@@ -12,6 +11,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as SQLite from "expo-sqlite";
+import PedidoEntrega from "./PedidoEntregaScreen";
 
 const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
@@ -27,6 +27,11 @@ export default function PedidoScreen() {
       <Stack.Screen
         name="Pedido"
         component={Pedido}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PedidoEntrega"
+        component={PedidoEntrega}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
@@ -74,7 +79,7 @@ function Pedido({ navigation }: any) {
             navigation.navigate("Produtos");
           }}
         >
-          <Ionicons name="document-text" size={24} color="white" />
+          <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       </View>
       <ScrollView
@@ -113,8 +118,8 @@ function Pedido({ navigation }: any) {
             observacaoP2,
           }) => (
             <View key={id}>
-              <View style={styles.boxBranca}>
-                <View>
+              <View>
+                <View style={styles.boxBranca}>
                   <Text style={styles.btnTxt3}>{tipoP}</Text>
                   <Text style={styles.btnTxt4}>{nomeProdutoP1}</Text>
                   <Text style={styles.btnTxt5}>{descricaoP1}</Text>
@@ -154,14 +159,13 @@ function Pedido({ navigation }: any) {
         <TouchableOpacity
           disabled={false}
           onPress={() => {
-            alert("Adicionado ao carrinho");
-            navigation.navigate("Pedido");
+            navigation.navigate("PedidoEntrega");
           }}
           style={styles.btn}
         >
           <Text style={styles.btnTxt}>
-            <Ionicons name="add-circle-sharp" size={20} color="#AB1900" />{" "}
-            Fechar Pedido
+            <Ionicons name="arrow-forward" size={20} color="#AB1900" /> Entrega
+            ou Retirada
           </Text>
         </TouchableOpacity>
       </View>
@@ -221,9 +225,8 @@ const styles = StyleSheet.create({
   },
   btn2: {
     backgroundColor: "#FBD721",
-    textAlign: "center",
-    justifyContent: "center",
     borderRadius: 10,
+    marginTop: 5,
   },
   btnTxt: {
     color: "#AB1900",
@@ -236,12 +239,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     padding: 1,
+    textAlign: "center",
   },
   btnTxt2: {
     color: "#ffffff",
     fontWeight: "bold",
     fontSize: 20,
-    marginRight: "30%",
+    marginRight: "10%",
   },
   btnTxt3: {
     color: "#ffff",
@@ -251,6 +255,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 20,
     padding: 2,
+    marginBottom: 5,
     textAlign: "center",
   },
   btnTxt4: {
@@ -269,6 +274,8 @@ const styles = StyleSheet.create({
   boxBranca: {
     borderRadius: 10,
     padding: 20,
+    width: "90%",
+    margin: 10,
 
     backgroundColor: "white",
     marginLeft: "auto",

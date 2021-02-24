@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginLeft: "auto",
     marginRight: "auto",
-    borderRadius: 2,
+    borderRadius: 10,
   },
   flexRow: {
     flex: 1,

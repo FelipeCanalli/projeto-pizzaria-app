@@ -153,7 +153,6 @@ function Produtos({ navigation }: any) {
                   <View style={styles.box}>
                     <View style={styles.box2}>
                       <View style={styles.box3}>
-                        <Text style={styles.title}>ID: {item.idproduto}</Text>
                         <Text style={styles.title}>{item.tipo}</Text>
                         <Text style={styles.title}>{item.nomeproduto}</Text>
                       </View>
@@ -173,24 +172,41 @@ function Produtos({ navigation }: any) {
           )}
         </View>
       </ImageBackground>
-      <View style={styles.footer}>
-        <TouchableOpacity>
-          <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
-        </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            navigation.navigate("Pedido");
+      {/* FOOTER */}
+      <View style={styles.footer}>
+        <View
+          style={{
+            //backgroundColor: "blue",
+            width: "50%",
           }}
         >
-          <Text style={styles.btnTxt2}>
-            {" "}
-            <Ionicons name="document-text" size={24} color="#AB1900" /> Ver
-            pedido
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            // backgroundColor: "purple",
+            width: "50%",
+          }}
+        >
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              navigation.navigate("Pedido");
+            }}
+          >
+            <Text style={styles.btnTxt2}>
+              {" "}
+              <Ionicons name="document-text" size={24} color="#AB1900" /> Ver
+              pedido
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
+      {/* FOOTER */}
     </View>
   );
 }
@@ -226,6 +242,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   btn: {
+    width: 200,
     backgroundColor: "#FBD721",
     textAlign: "center",
     justifyContent: "center",
@@ -235,14 +252,16 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: "#ffffff",
     fontWeight: "bold",
-    fontSize: 20,
-    marginRight: "35%",
+    fontSize: 14,
+    paddingRight: 90,
+    textAlign: "center",
   },
   btnTxt2: {
     color: "#AB1900",
     fontWeight: "bold",
     fontSize: 20,
     padding: 10,
+    textAlign: "center",
   },
   box: {
     padding: 10,
@@ -262,11 +281,11 @@ const styles = StyleSheet.create({
   },
   footer: {
     width: "100%",
-    height: "5%",
+    height: 45,
     paddingVertical: 10,
-    justifyContent: "flex-end",
-    paddingLeft: 20,
+    justifyContent: "center",
     backgroundColor: "#AB1900",
     flexDirection: "row",
+    alignItems: "center",
   },
 });
