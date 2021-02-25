@@ -91,12 +91,8 @@ function Pedido({ navigation }: any) {
       >
         <Text style={styles.title}>
           {" "}
-          <Ionicons
-            name="arrow-down-circle-sharp"
-            size={24}
-            color="#000"
-          />{" "}
-          Produtos no Pedido
+          <Ionicons name="document-text" size={24} color="#000" /> Produtos no
+          Pedido
         </Text>
         <View style={styles.separator} />
 
@@ -142,7 +138,7 @@ function Pedido({ navigation }: any) {
                         size={20}
                         color="#AB1900"
                       />{" "}
-                      Remover do Carrinho
+                      Remover do Pedido
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   title: {
-    marginLeft: 20,
+    textAlign: "center",
     justifyContent: "center",
     color: "black",
     fontSize: 24,

@@ -119,7 +119,7 @@ function Metade({ navigation }: any) {
         </TouchableOpacity>
       </View>
       <ImageBackground
-        source={require("../assets/icon.png")}
+        source={require("../assets/fundo.jpg")}
         style={styles.background}
       >
         <View style={styles.main}>
@@ -134,51 +134,67 @@ function Metade({ navigation }: any) {
               color="#fff"
             />
           ) : (
-            <FlatList
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-              horizontal={false}
-              data={dados}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("MetadePizza", {
-                      tipo: `${tipo}`,
-                      preco: +precoP1 / 2 + +item.preco / 2,
-                      quantidade: `${quantidade}`,
-                      idpizza1: `${idpizza1}`,
-                      nomeProduto1: `${nomeProdutoP1}`,
-                      descricao1: `${descricaoP1}`,
-                      preco1: `${precoP1}`,
-                      observacao1: `${observacaoP1}`,
-                      // Metade 2
-                      idpizza2: `${item.idproduto}`,
-                      nomeProduto2: `${item.nomeproduto}`,
-                      descricao2: `${item.descricao}`,
-                      preco2: `${item.preco}`,
-                    });
-                  }}
-                >
-                  <View style={styles.box}>
-                    <View style={styles.box2}>
-                      <View style={styles.box3}>
-                        <Text style={styles.title}>ID: {item.idproduto}</Text>
-                        <Text style={styles.title}>{item.tipo}</Text>
-                        <Text style={styles.title}>{item.nomeproduto}</Text>
-                      </View>
-                      <View>
-                        <Text style={[styles.title, { fontSize: 15 }]}>
-                          R$ {item.preco}
-                        </Text>
-                      </View>
-                    </View>
-                    <Text>{item.descricao}</Text>
+            <View>
+              <View style={styles.boxBranca}>
+                <View style={styles.boxFlex}>
+                  <View style={styles.icone}>
+                    <Ionicons name="pizza" size={20} color="#000" />
                   </View>
-                </TouchableOpacity>
-              )}
-              keyExtractor={({ idproduto }, index) => idproduto}
-            />
+                  <View style={styles.info}>
+                    <Text style={styles.title}>
+                      Escolha a outra parte da pizza :
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <FlatList
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
+                horizontal={false}
+                data={dados}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("MetadePizza", {
+                        tipo: `${tipo}`,
+                        preco: +precoP1 / 2 + +item.preco / 2,
+                        quantidade: `${quantidade}`,
+                        idpizza1: `${idpizza1}`,
+                        nomeProduto1: `${nomeProdutoP1}`,
+                        descricao1: `${descricaoP1}`,
+                        preco1: `${precoP1}`,
+                        observacao1: `${observacaoP1}`,
+                        // Metade 2
+                        idpizza2: `${item.idproduto}`,
+                        nomeProduto2: `${item.nomeproduto}`,
+                        descricao2: `${item.descricao}`,
+                        preco2: `${item.preco}`,
+                      });
+                    }}
+                  >
+                    <View style={styles.box}>
+                      <View style={styles.box2}>
+                        <View style={styles.box3}>
+                          <Text style={styles.title}>{item.tipo}</Text>
+                          <Text style={styles.title}>{item.nomeproduto}</Text>
+                        </View>
+                        <View>
+                          <Text style={[styles.title, { fontSize: 15 }]}>
+                            R$ {item.preco.replace(".", ",")}
+                          </Text>
+                        </View>
+                      </View>
+                      <Text>{item.descricao}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={({ idproduto }, index) => idproduto}
+              />
+            </View>
           )}
         </View>
       </ImageBackground>
@@ -199,10 +215,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
+  separator: {
+    marginVertical: 15,
+    height: 2.3,
+    width: "96%",
+    backgroundColor: "black",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
   background: {
     height: "100%",
     width: "100%",
     flex: 1,
+  },
+  boxFlex: {
+    flexDirection: "row",
+    width: "90%",
+    height: 90,
+    padding: 10,
+    margin: 0,
+    backgroundColor: "white",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 10,
+    marginTop: 20,
   },
   header: {
     width: "100%",
@@ -220,6 +256,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "uppercase",
+  },
+  boxBranca: {
+    width: "90%",
+    backgroundColor: "white",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 10,
   },
   box: {
     padding: 10,
@@ -250,5 +293,20 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontWeight: "bold",
     fontSize: 20,
+  },
+  icone: {
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: "#FBD721",
+    padding: 10,
+    width: "20%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  info: {
+    padding: 20,
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "center",
   },
 });

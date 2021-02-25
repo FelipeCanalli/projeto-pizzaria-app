@@ -5,11 +5,14 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, AntDesign } from "@expo/vector-icons";
+import * as SQLite from "expo-sqlite";
 
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase("pizzariaromero.banco");
 
 export default function PedidoEntregaScreen() {
   return (
@@ -19,22 +22,95 @@ export default function PedidoEntregaScreen() {
         component={PedidoEntrega}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Dados"
+        component={Dados}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
 
 function PedidoEntrega() {
-  const [observacao, setObservacao] = React.useState("");
+  const [valor, setValor] = React.useState(0);
+
+  React.useEffect(() => {
+    db.transaction((tx) => {
+      // Fazendo a soma dos valores dos produtos que estão no carrinho
+      tx.executeSql(
+        "select sum(precoP) as total from carrinho",
+        [],
+        (_, { rows: { _array } }) => {
+          setValor(_array[0].total.toFixed(2).replace(".", ","));
+          // console.log(_array[0]);
+        }
+      );
+    });
+  });
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        {" "}
-        <Ionicons name="arrow-down-circle-sharp" size={24} color="#000" />{" "}
-        Endereço
-      </Text>
-      <View style={styles.separator} />
-      <View style={styles.boxBranca}></View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Produtos");
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
+      <View
+        style={{
+          flex: 1,
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <ImageBackground
+          source={require("../assets/fundo.jpg")}
+          style={styles.background}
+        >
+          <View style={[styles.boxBranca, styles.centralizar]}>
+            <Text style={styles.title}>
+              Como você deseja receber o pedido ?
+            </Text>
+          </View>
+
+          <TouchableOpacity>
+            <View style={styles.boxBranca}>
+              <View style={styles.icone}>
+                <MaterialIcons name="delivery-dining" size={44} color="#000" />
+              </View>
+              <View style={styles.info}>
+                <Text style={styles.title2}>Receber em Casa</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity>
+            <View style={styles.boxBranca}>
+              <View style={styles.icone}>
+                <AntDesign name="solution1" size={44} color="#000" />
+              </View>
+              <View style={styles.info}>
+                <Text style={styles.title2}>Retirada na Pizzaria</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </ImageBackground>
+      </View>
+      <View style={styles.footer}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "flex-start",
+          }}
+        >
+          <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
+        </View>
+      </View>
     </View>
   );
 }
@@ -56,10 +132,15 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    color: "black",
-    fontSize: 24,
+    color: "#006B31",
+    fontSize: 23,
     fontWeight: "bold",
     margin: 10,
+  },
+  centralizar: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 3,
   },
   title4: {
     textAlign: "center",
@@ -81,13 +162,16 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   boxBranca: {
+    flexDirection: "row",
     width: "90%",
-    height: "40%",
+    height: 90,
     padding: 10,
+    margin: 0,
     backgroundColor: "white",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
+    marginTop: 20,
   },
   flexRow: {
     flex: 1,
@@ -158,9 +242,30 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   btnTxt: {
-    color: "#AB1900",
+    color: "white",
     fontWeight: "bold",
     fontSize: 20,
     padding: 10,
+  },
+  background: {
+    height: "100%",
+    width: "100%",
+    flex: 1,
+    justifyContent: "flex-start",
+  },
+  icone: {
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: "#FBD721",
+    padding: 20,
+    width: "20%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  info: {
+    padding: 20,
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "center",
   },
 });

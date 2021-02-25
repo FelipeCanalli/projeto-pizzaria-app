@@ -125,10 +125,7 @@ export function MetadePizza({ navigation }: any) {
 
   function testeVariaveis() {
     alert(`
-    PRECO FINAL : R$ ${
-      precoP
-      //.toFixed(2).replace(".", ","      )
-    }
+    PRECO FINAL : R$ ${precoP.toFixed(2).replace(".", ",")}
     Tipo: ${tipoP} 
     Quantidade: ${quantidadeP}
 
@@ -162,7 +159,6 @@ export function MetadePizza({ navigation }: any) {
         <View style={styles.box3}>
           <Text style={styles.text4}>Outra Parte :</Text>
           <Text style={styles.text3}>{nomeProdutoP1}</Text>
-          <Text style={styles.text4}>Obs: {observacaoP1}</Text>
 
           <TouchableOpacity
             style={styles.btn2}
@@ -205,7 +201,7 @@ export function MetadePizza({ navigation }: any) {
           <View style={styles.flexStretch}>
             <View style={styles.box2}>
               <Text style={styles.title2}>Valor :</Text>
-              <Text style={styles.preco}>R$ {precoP2}</Text>
+              <Text style={styles.preco}>R$ {precoP2.replace(".", ",")}</Text>
             </View>
           </View>
         </View>

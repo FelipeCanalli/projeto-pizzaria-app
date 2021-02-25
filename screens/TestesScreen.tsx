@@ -28,13 +28,13 @@ export default function Testes() {
       <TouchableOpacity
         onPress={() => {
           db.transaction((tx) => {
-            tx.executeSql("drop table carrinho");
+            tx.executeSql("delete from carrinho");
           });
-          console.log("## Tabela apagada ##");
+          console.log("## Dados da tabela apagados ##");
         }}
         style={styles.btn1}
       >
-        <Text style={styles.bt1Txt}>DROP TABLE</Text>
+        <Text style={styles.bt1Txt}>Limpar dados</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

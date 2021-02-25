@@ -189,7 +189,7 @@ export function DetalhesProduto({ navigation }: any) {
 
                 <View style={styles.box2}>
                   <Text style={styles.title2}>Valor :</Text>
-                  <Text style={styles.preco}>R$ {preco}</Text>
+                  <Text style={styles.preco}>R$ {preco.replace(".", ",")}</Text>
                 </View>
               </View>
 

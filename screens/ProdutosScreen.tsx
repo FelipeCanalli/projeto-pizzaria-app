@@ -158,7 +158,7 @@ function Produtos({ navigation }: any) {
                       </View>
                       <View>
                         <Text style={[styles.title, { fontSize: 15 }]}>
-                          R$ {item.preco}
+                          R$ {item.preco.replace(".", ",")}
                         </Text>
                       </View>
                     </View>
