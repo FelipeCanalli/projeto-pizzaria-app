@@ -64,6 +64,7 @@ function Home({ navigation }: any) {
               marginLeft: "auto",
               flex: 1,
               justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <Image source={require("../assets/icon.png")} style={styles.img1} />
@@ -129,14 +130,10 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
   },
   img1: {
-    justifyContent: "center",
-    marginRight: "auto",
-    marginLeft: "auto",
     resizeMode: "cover",
-    width: 450,
-    height: 300,
-    marginBottom: "10%",
-    marginTop: "10%",
+    width: 300,
+    height: 200,
+    paddingVertical: "40%",
   },
   btn1: {
     padding: 22,
@@ -176,7 +173,6 @@ const styles = StyleSheet.create({
     textAlign: "justify",
   },
   title: {
-    fontFamily: "Roboto",
     textAlign: "center",
     margin: 20,
     color: "white",

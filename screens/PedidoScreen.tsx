@@ -271,6 +271,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: "90%",
+    height: "auto",
     margin: 10,
 
     backgroundColor: "white",

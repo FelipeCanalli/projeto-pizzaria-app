@@ -135,16 +135,14 @@ function Metade({ navigation }: any) {
             />
           ) : (
             <View>
-              <View style={styles.boxBranca}>
-                <View style={styles.boxFlex}>
-                  <View style={styles.icone}>
-                    <Ionicons name="pizza" size={20} color="#000" />
-                  </View>
-                  <View style={styles.info}>
-                    <Text style={styles.title}>
-                      Escolha a outra parte da pizza :
-                    </Text>
-                  </View>
+              <View style={styles.boxFlex}>
+                <View style={styles.icone}>
+                  <Ionicons name="pizza" size={20} color="#000" />
+                </View>
+                <View style={styles.info}>
+                  <Text style={styles.title}>
+                    Escolha a outra parte da pizza :
+                  </Text>
                 </View>
               </View>
               <FlatList
@@ -230,15 +228,12 @@ const styles = StyleSheet.create({
   },
   boxFlex: {
     flexDirection: "row",
-    width: "90%",
-    height: 90,
-    padding: 10,
+    width: "97%",
     margin: 0,
     backgroundColor: "white",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    marginTop: 20,
   },
   header: {
     width: "100%",
@@ -258,8 +253,8 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   boxBranca: {
-    width: "90%",
-    backgroundColor: "white",
+    width: "97%",
+    backgroundColor: "#fff",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
@@ -298,13 +293,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     backgroundColor: "#FBD721",
-    padding: 10,
-    width: "20%",
+    padding: 20,
+    margin: 20,
     justifyContent: "center",
     alignItems: "center",
   },
   info: {
-    padding: 20,
+    margin: 20,
     flex: 1,
     alignItems: "stretch",
     justifyContent: "center",

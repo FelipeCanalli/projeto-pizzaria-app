@@ -99,6 +99,7 @@ function Produtos({ navigation }: any) {
         [],
         (_, { rows: { _array } }) => {
           setValor(_array[0].total.toFixed(2).replace(".", ","));
+          //
           // console.log(_array[0]);
         }
       );

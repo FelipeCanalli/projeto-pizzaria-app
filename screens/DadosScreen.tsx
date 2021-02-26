@@ -5,13 +5,14 @@ import {
   View,
   TouchableOpacity,
   TextInput,
+  ImageBackground,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
-export default function DadosScreen() {
+export default function DadosScreen({ navigation }: any) {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -28,26 +29,82 @@ function Dados() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        {" "}
-        <Ionicons name="arrow-down-circle-sharp" size={24} color="#000" />{" "}
-        Endereço
-      </Text>
-      <View style={styles.separator} />
-      <View style={styles.boxBranca}>
-        {/* OBSERVAÇÕES */}
-        <View style={styles.flexStretch}>
-          <Text style={styles.title4}>OBSERVAÇÕES</Text>
-          <TextInput
-            numberOfLines={1}
-            style={styles.TextInput}
-            editable
-            maxLength={80}
-            value={observacao}
-            onChangeText={(text) => setObservacao(text)}
-          />
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
+        >
+          <Ionicons name="home" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      <ImageBackground
+        source={require("../assets/fundo.jpg")}
+        style={styles.background}
+      >
+        <View style={{ width: "100%", backgroundColor: "white" }}>
+          <Text style={styles.title}>
+            {" "}
+            <Ionicons
+              name="arrow-down-circle-sharp"
+              size={24}
+              color="#000"
+            />{" "}
+            Endereço
+          </Text>
+          <View style={styles.separator} />
         </View>
-        {/* OBSERVAÇÕES */}
+
+        <View style={styles.boxBranca}>
+          {/* OBSERVAÇÕES */}
+          {/*  Endereco, Nº, Complemento, Bairro, Cidade, Estado, Cep, Referencia */}
+          <View style={styles.flexStretch}>
+            <Text style={styles.title4}>Endereço</Text>
+            <TextInput
+              numberOfLines={1}
+              style={styles.TextInput}
+              editable
+              maxLength={80}
+              value={observacao}
+              onChangeText={(text) => setObservacao(text)}
+            />
+          </View>
+          {/* OBSERVAÇÕES */}
+          {/* OBSERVAÇÕES */}
+          <View style={styles.flexStretch}>
+            <Text style={styles.title4}>N°</Text>
+            <TextInput
+              numberOfLines={1}
+              style={styles.TextInput}
+              editable
+              maxLength={80}
+              value={observacao}
+              onChangeText={(text) => setObservacao(text)}
+            />
+          </View>
+          {/* OBSERVAÇÕES */}
+        </View>
+      </ImageBackground>
+      <View style={styles.footer}>
+        <View
+          style={{
+            // backgroundColor: "purple",
+            width: "50%",
+          }}
+        >
+          <TouchableOpacity
+            style={styles.btn}
+            onPress={() => {
+              navigation.navigate("Pedido");
+            }}
+          >
+            <Text style={styles.btnTxt2}>
+              {" "}
+              <Ionicons name="arrow-forward" size={24} color="#AB1900" />{" "}
+              Continuar
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -57,8 +114,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FBD721",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     width: "100%",
+  },
+  background: {
+    height: "100%",
+    width: "100%",
+    flex: 1,
   },
   header: {
     width: "100%",
@@ -69,12 +131,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   title: {
-    textAlign: "center",
+    textAlign: "left",
     color: "black",
     fontSize: 24,
     fontWeight: "bold",
     margin: 10,
   },
+
   title4: {
     textAlign: "center",
     color: "black",
@@ -96,7 +159,7 @@ const styles = StyleSheet.create({
   },
   boxBranca: {
     width: "90%",
-    height: "40%",
+    height: "90%",
     padding: 10,
     backgroundColor: "white",
     marginLeft: "auto",
@@ -111,8 +174,7 @@ const styles = StyleSheet.create({
   },
 
   flexStretch: {
-    flex: 1,
-    alignItems: "stretch",
+    margin: 10,
   },
 
   TextInput: {
@@ -126,12 +188,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 6,
     borderRadius: 5,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   title2: {
     fontWeight: "bold",
     fontSize: 20,
     color: "#000",
+  },
+  btnTxt2: {
+    color: "#AB1900",
+    fontWeight: "bold",
+    fontSize: 20,
+    padding: 5,
+    textAlign: "center",
   },
   title3: {
     color: "#000",
@@ -169,6 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FBD721",
     textAlign: "center",
     justifyContent: "center",
+    width: 150,
     borderRadius: 10,
   },
   btnTxt: {

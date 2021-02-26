@@ -10,6 +10,7 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
+import Dados from "./DadosScreen";
 
 const Stack = createStackNavigator();
 const db = SQLite.openDatabase("pizzariaromero.banco");
@@ -31,7 +32,7 @@ export default function PedidoEntregaScreen() {
   );
 }
 
-function PedidoEntrega() {
+function PedidoEntrega({ navigation }: any) {
   const [valor, setValor] = React.useState(0);
 
   React.useEffect(() => {
@@ -53,7 +54,7 @@ function PedidoEntrega() {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Produtos");
+            navigation.navigate("Pedido");
           }}
         >
           <Ionicons name="arrow-back" size={24} color="white" />
@@ -71,13 +72,17 @@ function PedidoEntrega() {
           source={require("../assets/fundo.jpg")}
           style={styles.background}
         >
-          <View style={[styles.boxBranca, styles.centralizar]}>
+          <View style={[styles.boxBranca2, styles.centralizar]}>
             <Text style={styles.title}>
               Como você deseja receber o pedido ?
             </Text>
           </View>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Dados");
+            }}
+          >
             <View style={styles.boxBranca}>
               <View style={styles.icone}>
                 <MaterialIcons name="delivery-dining" size={44} color="#000" />
@@ -88,13 +93,20 @@ function PedidoEntrega() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("Dados");
+            }}
+          >
             <View style={styles.boxBranca}>
               <View style={styles.icone}>
                 <AntDesign name="solution1" size={44} color="#000" />
               </View>
               <View style={styles.info}>
                 <Text style={styles.title2}>Retirada na Pizzaria</Text>
+                <Text>
+                  Informe um telefone válido para a confirmação do cadastro
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -163,7 +175,21 @@ const styles = StyleSheet.create({
   },
   boxBranca: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     width: "90%",
+    height: 100,
+    padding: 10,
+    margin: 0,
+    backgroundColor: "white",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  boxBranca2: {
+    flexDirection: "row",
+    width: "97%",
     height: 90,
     padding: 10,
     margin: 0,
@@ -254,11 +280,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   icone: {
+    margin: 20,
     borderWidth: 2,
     borderRadius: 10,
     backgroundColor: "#FBD721",
-    padding: 20,
-    width: "20%",
+    width: 70,
+    height: 70,
     justifyContent: "center",
     alignItems: "center",
   },
