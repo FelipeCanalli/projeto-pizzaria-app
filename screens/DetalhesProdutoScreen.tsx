@@ -122,22 +122,22 @@ export function DetalhesProduto({ navigation }: any) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Produtos");
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         horizontal={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Produtos");
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-
         <View>
           <Text style={styles.title}>{tipo}</Text>
           <Text style={styles.title}>{nomeproduto}</Text>
@@ -239,54 +239,56 @@ export function DetalhesProduto({ navigation }: any) {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        {partes ? (
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={() => {
-              navigation.navigate("Metade", {
-                idproduto1: `${idproduto}`,
-                tipo1: `${tipo}`,
-                nomeProduto1: `${nomeproduto}`,
-                descricao1: `${descricao}`,
-                preco1: `${preco}`,
-                observacao1: `${observacao}`,
-                quantidade1: `${quantidade}`,
-              });
-            }}
-          >
-            <Text style={styles.btnTxt}>
-              {" "}
-              <Ionicons
-                name="add-circle-sharp"
-                size={20}
-                color="#AB1900"
-              />{" "}
-              Escolher a outra Parte
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              adicionarAoCarrinho(
-                tipo,
-                quantidade,
-                preco,
-                idproduto,
-                nomeproduto,
-                descricao,
-                preco,
-                observacao
-              );
-              navigation.navigate("Pedido");
-            }}
-            style={styles.btn}
-          >
-            <Text style={styles.btnTxt}>
-              <Ionicons name="add-circle-sharp" size={20} color="#AB1900" />{" "}
-              Adicionar ao Pedido
-            </Text>
-          </TouchableOpacity>
-        )}
+        <View style={styles.viewFooter}>
+          {partes ? (
+            <TouchableOpacity
+              style={styles.btnFooter}
+              onPress={() => {
+                navigation.navigate("Metade", {
+                  idproduto1: `${idproduto}`,
+                  tipo1: `${tipo}`,
+                  nomeProduto1: `${nomeproduto}`,
+                  descricao1: `${descricao}`,
+                  preco1: `${preco}`,
+                  observacao1: `${observacao}`,
+                  quantidade1: `${quantidade}`,
+                });
+              }}
+            >
+              <Text style={styles.btnTxtFooter}>
+                {" "}
+                <Ionicons
+                  name="add-circle-sharp"
+                  size={20}
+                  color="#AB1900"
+                />{" "}
+                Escolher outra Parte{" "}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                adicionarAoCarrinho(
+                  tipo,
+                  quantidade,
+                  preco,
+                  idproduto,
+                  nomeproduto,
+                  descricao,
+                  preco,
+                  observacao
+                );
+                navigation.navigate("Pedido");
+              }}
+              style={styles.btnFooter}
+            >
+              <Text style={styles.btnTxtFooter}>
+                <Ionicons name="add-circle-sharp" size={20} color="#AB1900" />{" "}
+                Adicionar ao Pedido
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -386,24 +388,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "stretch",
     width: "100%",
     height: 45,
-    paddingVertical: 10,
-    justifyContent: "flex-end",
-    paddingRight: 20,
     backgroundColor: "#AB1900",
-    flexDirection: "row",
   },
-  btn: {
-    backgroundColor: "#FBD721",
-    textAlign: "center",
+  viewFooter: {
     justifyContent: "center",
-    borderRadius: 10,
+    alignItems: "flex-end",
+    marginRight: 40,
+    width: "100%",
   },
-  btnTxt: {
+  btnFooter: {
+    width: "60%",
+    backgroundColor: "#FBD721",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    paddingVertical: 4,
+  },
+  btnTxtFooter: {
     color: "#AB1900",
     fontWeight: "bold",
     fontSize: 20,
-    padding: 10,
   },
 });

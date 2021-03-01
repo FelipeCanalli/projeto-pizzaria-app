@@ -149,21 +149,25 @@ function Pedido({ navigation }: any) {
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity>
-          <Text style={styles.btnTxt2}>Total: R$ {valor}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          disabled={false}
-          onPress={() => {
-            navigation.navigate("PedidoEntrega");
-          }}
-          style={styles.btn}
-        >
-          <Text style={styles.btnTxt}>
-            <Ionicons name="arrow-forward" size={20} color="#AB1900" /> Entrega
-            ou Retirada
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.viewFooter}>
+          <TouchableOpacity>
+            <Text style={styles.txtPrice}>Total: R$ {valor}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.viewFooter}>
+          <TouchableOpacity
+            disabled={false}
+            onPress={() => {
+              navigation.navigate("PedidoEntrega");
+            }}
+            style={styles.btnFooter}
+          >
+            <Text style={styles.btnTxtFooter}>
+              <Ionicons name="arrow-forward" size={20} color="#AB1900" />{" "}
+              Recebimento
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -203,15 +207,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginTop: 10,
-  },
-  footer: {
-    width: "100%",
-    height: "5%",
-    paddingVertical: 10,
-    justifyContent: "flex-end",
-    paddingRight: 20,
-    backgroundColor: "#AB1900",
-    flexDirection: "row",
   },
   btn: {
     backgroundColor: "#FBD721",
@@ -281,5 +276,40 @@ const styles = StyleSheet.create({
   box2: {
     borderRadius: 10,
     backgroundColor: "#AB1900",
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "stretch",
+    width: "100%",
+    height: 45,
+    backgroundColor: "#AB1900",
+  },
+  viewFooter: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "50%",
+  },
+  btnFooter: {
+    width: "90%",
+    backgroundColor: "#FBD721",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    paddingVertical: 4,
+  },
+  btnTxtFooter: {
+    color: "#AB1900",
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  txtPrice: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0.1, height: 0.1 },
+    textShadowRadius: 2,
   },
 });

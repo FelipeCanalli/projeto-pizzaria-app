@@ -9,13 +9,16 @@ import {
   ImageBackground,
   Alert,
   RefreshControl,
+  ScrollView,
 } from "react-native";
 import { host } from "../config/host";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Ionicons } from "@expo/vector-icons";
 import MetadePizza from "./MetadePizzaScreen";
+import * as SQLite from "expo-sqlite";
 
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase("pizzariaromero.banco");
 
 let tipo = "";
 let quantidade = 1;
@@ -77,6 +80,20 @@ function Metade({ navigation }: any) {
   }, []);
 
   React.useEffect(() => {
+    db.transaction((tx) => {
+      // Fazendo a soma dos valores dos produtos que estão no carrinho
+      tx.executeSql(
+        "select sum(precoP) as total from carrinho",
+        [],
+        (_, { rows: { _array } }) => {
+          setValor(_array[0].total.toFixed(2).replace(".", ","));
+          // console.log(_array[0]);
+        }
+      );
+    });
+  });
+
+  React.useEffect(() => {
     fetch(`${host}/service/produto/listarTipo.php?tipo=${tipo}`, {
       method: "GET",
       headers: {
@@ -135,71 +152,85 @@ function Metade({ navigation }: any) {
             />
           ) : (
             <View>
-              <View style={styles.boxFlex}>
-                <View style={styles.icone}>
-                  <Ionicons name="pizza" size={20} color="#000" />
-                </View>
-                <View style={styles.info}>
-                  <Text style={styles.title}>
-                    Escolha a outra parte da pizza :
-                  </Text>
-                </View>
-              </View>
-              <FlatList
+              <ScrollView
                 refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                   />
                 }
-                horizontal={false}
-                data={dados}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("MetadePizza", {
-                        tipo: `${tipo}`,
-                        preco: +precoP1 / 2 + +item.preco / 2,
-                        quantidade: `${quantidade}`,
-                        idpizza1: `${idpizza1}`,
-                        nomeProduto1: `${nomeProdutoP1}`,
-                        descricao1: `${descricaoP1}`,
-                        preco1: `${precoP1}`,
-                        observacao1: `${observacaoP1}`,
-                        // Metade 2
-                        idpizza2: `${item.idproduto}`,
-                        nomeProduto2: `${item.nomeproduto}`,
-                        descricao2: `${item.descricao}`,
-                        preco2: `${item.preco}`,
-                      });
-                    }}
-                  >
-                    <View style={styles.box}>
-                      <View style={styles.box2}>
-                        <View style={styles.box3}>
-                          <Text style={styles.title}>{item.tipo}</Text>
-                          <Text style={styles.title}>{item.nomeproduto}</Text>
+              >
+                <View style={styles.boxFlex}>
+                  {/* Icon */}
+                  <View style={styles.icone}>
+                    <Ionicons name="pizza" size={20} color="#000" />
+                  </View>
+                  {/* Icon */}
+
+                  <View style={styles.info}>
+                    <Text style={styles.title}>
+                      Escolha a outra parte da pizza :
+                    </Text>
+                  </View>
+                </View>
+                {/* FlatList */}
+                <View>
+                  <FlatList
+                    horizontal={false}
+                    data={dados}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate("MetadePizza", {
+                            tipo: `${tipo}`,
+                            preco: +precoP1 / 2 + +item.preco / 2,
+                            quantidade: `${quantidade}`,
+                            idpizza1: `${idpizza1}`,
+                            nomeProduto1: `${nomeProdutoP1}`,
+                            descricao1: `${descricaoP1}`,
+                            preco1: `${precoP1}`,
+                            observacao1: `${observacaoP1}`,
+                            // Metade 2
+                            idpizza2: `${item.idproduto}`,
+                            nomeProduto2: `${item.nomeproduto}`,
+                            descricao2: `${item.descricao}`,
+                            preco2: `${item.preco}`,
+                          });
+                        }}
+                      >
+                        <View style={styles.box}>
+                          <View style={styles.box2}>
+                            <View style={styles.box3}>
+                              <Text style={styles.title}>{item.tipo}</Text>
+                              <Text style={styles.title}>
+                                {item.nomeproduto}
+                              </Text>
+                            </View>
+                            <View>
+                              <Text style={[styles.title, { fontSize: 15 }]}>
+                                R$ {item.preco.replace(".", ",")}
+                              </Text>
+                            </View>
+                          </View>
+                          <Text>{item.descricao}</Text>
                         </View>
-                        <View>
-                          <Text style={[styles.title, { fontSize: 15 }]}>
-                            R$ {item.preco.replace(".", ",")}
-                          </Text>
-                        </View>
-                      </View>
-                      <Text>{item.descricao}</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={({ idproduto }, index) => idproduto}
-              />
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={({ idproduto }, index) => idproduto}
+                  />
+                </View>
+                {/* FlatList */}
+              </ScrollView>
             </View>
           )}
         </View>
       </ImageBackground>
       <View style={styles.footer}>
-        <TouchableOpacity>
-          <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
-        </TouchableOpacity>
+        <View style={styles.viewFooter}>
+          <TouchableOpacity>
+            <Text style={styles.txtPrice}>Total: R$ {valor}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -227,10 +258,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   boxFlex: {
+    flex: 1,
+    textAlign: "center",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     width: "97%",
     margin: 0,
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
@@ -275,6 +310,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
   },
+  icone: {
+    width: 50,
+    height: 50,
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: "#FBD721",
+    padding: 10,
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  info: {
+    margin: 20,
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "center",
+  },
   footer: {
     width: "100%",
     height: 45,
@@ -284,24 +336,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#AB1900",
     flexDirection: "row",
   },
-  btnTxt: {
+  viewFooter: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+    marginLeft: 40,
+    width: "100%",
+  },
+  txtPrice: {
     color: "#ffffff",
     fontWeight: "bold",
     fontSize: 20,
-  },
-  icone: {
-    borderWidth: 2,
-    borderRadius: 10,
-    backgroundColor: "#FBD721",
-    padding: 20,
-    margin: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  info: {
-    margin: 20,
-    flex: 1,
-    alignItems: "stretch",
-    justifyContent: "center",
+    textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0.1, height: 0.1 },
+    textShadowRadius: 2,
   },
 });

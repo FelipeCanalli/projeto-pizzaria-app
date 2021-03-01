@@ -72,7 +72,7 @@ function PedidoEntrega({ navigation }: any) {
           source={require("../assets/fundo.jpg")}
           style={styles.background}
         >
-          <View style={[styles.boxBranca2, styles.centralizar]}>
+          <View style={[styles.boxBranca, styles.centralizar]}>
             <Text style={styles.title}>
               Como você deseja receber o pedido ?
             </Text>
@@ -83,9 +83,9 @@ function PedidoEntrega({ navigation }: any) {
               navigation.navigate("Dados");
             }}
           >
-            <View style={styles.boxBranca}>
+            <View style={styles.boxFlex}>
               <View style={styles.icone}>
-                <MaterialIcons name="delivery-dining" size={44} color="#000" />
+                <MaterialIcons name="delivery-dining" size={24} color="#000" />
               </View>
               <View style={styles.info}>
                 <Text style={styles.title2}>Receber em Casa</Text>
@@ -98,9 +98,9 @@ function PedidoEntrega({ navigation }: any) {
               navigation.navigate("Dados");
             }}
           >
-            <View style={styles.boxBranca}>
+            <View style={styles.boxFlex}>
               <View style={styles.icone}>
-                <AntDesign name="solution1" size={44} color="#000" />
+                <AntDesign name="solution1" size={20} color="#000" />
               </View>
               <View style={styles.info}>
                 <Text style={styles.title2}>Retirada na Pizzaria</Text>
@@ -113,14 +113,10 @@ function PedidoEntrega({ navigation }: any) {
         </ImageBackground>
       </View>
       <View style={styles.footer}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "flex-start",
-          }}
-        >
-          <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
+        <View style={styles.viewFooter}>
+          <TouchableOpacity>
+            <Text style={styles.txtPrice}>Total: R$ {valor}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -175,20 +171,6 @@ const styles = StyleSheet.create({
   },
   boxBranca: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "90%",
-    height: 100,
-    padding: 10,
-    margin: 0,
-    backgroundColor: "white",
-    marginLeft: "auto",
-    marginRight: "auto",
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  boxBranca2: {
-    flexDirection: "row",
     width: "97%",
     height: 90,
     padding: 10,
@@ -197,7 +179,7 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     borderRadius: 10,
-    marginTop: 20,
+    marginVertical: 20,
   },
   flexRow: {
     flex: 1,
@@ -252,14 +234,46 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
   },
+
+  boxFlex: {
+    textAlign: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "90%",
+    height: 90,
+    padding: 7,
+    margin: 10,
+
+    backgroundColor: "#fff",
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 10,
+  },
+
   footer: {
     width: "100%",
     height: 45,
     paddingVertical: 10,
-    justifyContent: "flex-end",
-    paddingRight: 20,
+    justifyContent: "flex-start",
+    paddingLeft: 20,
     backgroundColor: "#AB1900",
     flexDirection: "row",
+  },
+  viewFooter: {
+    justifyContent: "center",
+    alignItems: "flex-start",
+    marginLeft: 40,
+    width: "100%",
+  },
+  txtPrice: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 20,
+    textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0.1, height: 0.1 },
+    textShadowRadius: 2,
   },
   btn: {
     backgroundColor: "#FBD721",
@@ -280,17 +294,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   icone: {
-    margin: 20,
+    width: 50,
+    height: 50,
     borderWidth: 2,
     borderRadius: 10,
     backgroundColor: "#FBD721",
-    width: 70,
-    height: 70,
+    padding: 10,
+    margin: 10,
     justifyContent: "center",
     alignItems: "center",
   },
   info: {
-    padding: 20,
+    margin: 20,
     flex: 1,
     alignItems: "stretch",
     justifyContent: "center",

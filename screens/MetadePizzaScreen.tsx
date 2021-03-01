@@ -124,7 +124,9 @@ export function MetadePizza({ navigation }: any) {
   }
 
   function testeVariaveis() {
-    alert(`
+    Alert.alert(
+      "Resumo do Pizza :",
+      `
     PRECO FINAL : R$ ${precoP.toFixed(2).replace(".", ",")}
     Tipo: ${tipoP} 
     Quantidade: ${quantidadeP}
@@ -140,22 +142,23 @@ export function MetadePizza({ navigation }: any) {
     Descrição: ${descricaoP2}
     Preço: ${precoP2}
     Observação: ${obsP2}
-    `);
+    `
+    );
   }
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("Produtos");
-            }}
-          >
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Produtos");
+          }}
+        >
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
 
+      <ScrollView>
         <View style={styles.box3}>
           <Text style={styles.text4}>Outra Parte :</Text>
           <Text style={styles.text3}>{nomeProdutoP1}</Text>
@@ -196,34 +199,38 @@ export function MetadePizza({ navigation }: any) {
               value={obsP2}
               onChangeText={(text) => setObservacaoP2(text)}
             />
-          </View>
-          {/* OBSERVAÇÕES */}
-          <View style={styles.flexStretch}>
+
+            {/* OBSERVAÇÕES */}
+
             <View style={styles.box2}>
               <Text style={styles.title2}>Valor :</Text>
               <Text style={styles.preco}>R$ {precoP2.replace(".", ",")}</Text>
             </View>
+            <TouchableOpacity
+              style={styles.btn3}
+              onPress={() => {
+                testeVariaveis();
+              }}
+            >
+              <Text style={styles.btnTxt2}>Resumo do Pizza</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
 
       <View style={styles.footer2}>
-        <Ionicons name="warning-sharp" size={24} color="#bf3434" />
-
+        <Ionicons
+          name="warning-sharp"
+          size={24}
+          color="#bf3434"
+          style={{ margin: 4 }}
+        />
         <Text style={styles.text2}>
           O preço final a ser considerado a soma e divisão das metades
         </Text>
       </View>
 
       <View style={styles.footer}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            testeVariaveis();
-          }}
-        >
-          <Text style={styles.btnTxt}>Variaveis</Text>
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             adicionarAoCarrinho(
@@ -306,11 +313,12 @@ const styles = StyleSheet.create({
   },
   boxBranca: {
     width: "90%",
-    padding: 10,
+    padding: 20,
+    margin: 20,
     backgroundColor: "white",
     marginLeft: "auto",
     marginRight: "auto",
-    borderRadius: 2,
+    borderRadius: 10,
   },
   flexRow: {
     flex: 1,
@@ -320,8 +328,7 @@ const styles = StyleSheet.create({
   },
 
   flexStretch: {
-    flex: 1,
-    alignItems: "stretch",
+    width: "100%",
   },
 
   TextInput: {
@@ -364,7 +371,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 10,
     padding: 10,
-    width: "70%",
+    width: "80%",
     height: "100%",
     marginLeft: "auto",
     marginRight: "auto",
@@ -396,11 +403,10 @@ const styles = StyleSheet.create({
   },
   footer2: {
     width: "100%",
-    height: 25,
+    height: 40,
     alignItems: "center",
-    paddingVertical: 10,
+    paddingHorizontal: 30,
     justifyContent: "center",
-    paddingRight: 20,
     flexDirection: "row",
     backgroundColor: "#fab1a0",
   },
@@ -420,8 +426,26 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
   },
+  btn3: {
+    width: 200,
+    marginTop: 10,
+    height: 40,
+    backgroundColor: "#AB1900",
+    textAlign: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    alignItems: "center",
+  },
   btnTxt: {
     color: "#AB1900",
+
+    fontWeight: "bold",
+    fontSize: 20,
+    padding: 10,
+  },
+  btnTxt2: {
+    color: "#AB1900",
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 20,
     padding: 10,

@@ -176,32 +176,22 @@ function Produtos({ navigation }: any) {
 
       {/* FOOTER */}
       <View style={styles.footer}>
-        <View
-          style={{
-            //backgroundColor: "blue",
-            width: "50%",
-          }}
-        >
+        <View style={styles.viewFooter}>
           <TouchableOpacity>
-            <Text style={styles.btnTxt}>Total: R$ {valor}</Text>
+            <Text style={styles.txtPrice}>Total: R$ {valor}</Text>
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            // backgroundColor: "purple",
-            width: "50%",
-          }}
-        >
+        <View style={styles.viewFooter}>
           <TouchableOpacity
-            style={styles.btn}
+            style={styles.btnFooter}
             onPress={() => {
               navigation.navigate("Pedido");
             }}
           >
-            <Text style={styles.btnTxt2}>
+            <Text style={styles.btnTxtFooter}>
               {" "}
-              <Ionicons name="document-text" size={24} color="#AB1900" /> Ver
+              <Ionicons name="document-text" size={20} color="#AB1900" /> Ver
               pedido
             </Text>
           </TouchableOpacity>
@@ -242,27 +232,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
   },
-  btn: {
-    width: 200,
-    backgroundColor: "#FBD721",
-    textAlign: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    marginRight: 20,
-  },
-  btnTxt: {
+  txtPrice: {
     color: "#ffffff",
     fontWeight: "bold",
-    fontSize: 14,
-    paddingRight: 90,
-    textAlign: "center",
-  },
-  btnTxt2: {
-    color: "#AB1900",
-    fontWeight: "bold",
     fontSize: 20,
-    padding: 10,
     textAlign: "center",
+    textShadowColor: "#000",
+    textShadowOffset: { width: 0.1, height: 0.1 },
+    textShadowRadius: 2,
   },
   box: {
     padding: 10,
@@ -281,12 +258,29 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   footer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "stretch",
     width: "100%",
     height: 45,
-    paddingVertical: 10,
-    justifyContent: "center",
     backgroundColor: "#AB1900",
-    flexDirection: "row",
+  },
+  viewFooter: {
+    justifyContent: "center",
     alignItems: "center",
+    width: "50%",
+  },
+  btnFooter: {
+    width: "70%",
+    backgroundColor: "#FBD721",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    paddingVertical: 4,
+  },
+  btnTxtFooter: {
+    color: "#AB1900",
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });

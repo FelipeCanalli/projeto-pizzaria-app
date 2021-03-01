@@ -27,12 +27,12 @@ export default function App() {
             headerTintColor: "rgb(0,0,0)",
             headerStyle: {
               backgroundColor: "#AB1900",
-              height: "3.5%",
+              height: 25,
             },
           }}
         />
       </Stack.Navigator>
-      <StatusBar style="dark" animated={true} />
+      <StatusBar style="light" animated={true} />
     </NavigationContainer>
   );
 }
